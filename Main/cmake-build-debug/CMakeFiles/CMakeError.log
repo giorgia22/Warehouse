@@ -1,0 +1,36 @@
+Determining if the C compiler works failed with the following output:
+Change Dir: C:/Users/giorgia/Google Drive/Anno 2018-2019/TPSEE/2°progetto/Software/untitled/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command:"nmake" "/nologo" "cmTC_1ea10\fast"
+	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\bin\HostX86\x86\nmake.exe" -f CMakeFiles\cmTC_1ea10.dir\build.make /nologo -L                  CMakeFiles\cmTC_1ea10.dir\build
+Building C object CMakeFiles/cmTC_1ea10.dir/testCCompiler.c.obj
+	C:\PROGRA~2\MICROS~4\2017\COMMUN~1\VC\Tools\MSVC\1416~1.270\bin\Hostx86\x86\cl.exe @C:\Users\giorgia\AppData\Local\Temp\nmA19D.tmp
+testCCompiler.c
+Linking C executable cmTC_1ea10.exe
+	"C:\Program Files\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_1ea10.dir --manifests  -- C:\PROGRA~2\MICROS~4\2017\COMMUN~1\VC\Tools\MSVC\1416~1.270\bin\Hostx86\x86\link.exe /nologo @CMakeFiles\cmTC_1ea10.dir\objects1.rsp @C:\Users\giorgia\AppData\Local\Temp\nmAA77.tmp
+LINK Pass 1: command "C:\PROGRA~2\MICROS~4\2017\COMMUN~1\VC\Tools\MSVC\1416~1.270\bin\Hostx86\x86\link.exe /nologo @CMakeFiles\cmTC_1ea10.dir\objects1.rsp /out:cmTC_1ea10.exe /implib:cmTC_1ea10.lib /pdb:C:\Users\giorgia\Google Drive\Anno 2018-2019\TPSEE\2?progetto\Software\untitled\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_1ea10.pdb /version:0.0 /machine:X86 /debug /INCREMENTAL /subsystem:console kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTFILE:CMakeFiles\cmTC_1ea10.dir/intermediate.manifest CMakeFiles\cmTC_1ea10.dir/manifest.res" failed (exit code 1201) with the following output:
+LINK : fatal error LNK1201: error writing to program database 'C:\Users\giorgia\Google Drive\Anno 2018-2019\TPSEE\2?progetto\Software\untitled\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_1ea10.pdb'; check for insufficient disk space, invalid path, or insufficient privilege
+NMAKE : fatal error U1077: '"C:\Program Files\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe"' : return code '0xffffffff'
+Stop.
+NMAKE : fatal error U1077: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\bin\HostX86\x86\nmake.exe"' : return code '0x2'
+Stop.
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: C:/Users/giorgia/Google Drive/Anno 2018-2019/TPSEE/2°progetto/Software/untitled/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command:"nmake" "/nologo" "cmTC_99ffb\fast"
+	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\bin\HostX86\x86\nmake.exe" -f CMakeFiles\cmTC_99ffb.dir\build.make /nologo -L                  CMakeFiles\cmTC_99ffb.dir\build
+Building C object CMakeFiles/cmTC_99ffb.dir/testCCompiler.c.obj
+	C:\PROGRA~2\MICROS~4\2017\COMMUN~1\VC\Tools\MSVC\1416~1.270\bin\Hostx86\x86\cl.exe @C:\Users\giorgia\AppData\Local\Temp\nmD569.tmp
+testCCompiler.c
+Linking C executable cmTC_99ffb.exe
+	"C:\Program Files\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_99ffb.dir --manifests  -- C:\PROGRA~2\MICROS~4\2017\COMMUN~1\VC\Tools\MSVC\1416~1.270\bin\Hostx86\x86\link.exe /nologo @CMakeFiles\cmTC_99ffb.dir\objects1.rsp @C:\Users\giorgia\AppData\Local\Temp\nmD701.tmp
+LINK Pass 1: command "C:\PROGRA~2\MICROS~4\2017\COMMUN~1\VC\Tools\MSVC\1416~1.270\bin\Hostx86\x86\link.exe /nologo @CMakeFiles\cmTC_99ffb.dir\objects1.rsp /out:cmTC_99ffb.exe /implib:cmTC_99ffb.lib /pdb:C:\Users\giorgia\Google Drive\Anno 2018-2019\TPSEE\2?progetto\Software\untitled\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_99ffb.pdb /version:0.0 /machine:X86 /debug /INCREMENTAL /subsystem:console kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTFILE:CMakeFiles\cmTC_99ffb.dir/intermediate.manifest CMakeFiles\cmTC_99ffb.dir/manifest.res" failed (exit code 1201) with the following output:
+LINK : fatal error LNK1201: error writing to program database 'C:\Users\giorgia\Google Drive\Anno 2018-2019\TPSEE\2?progetto\Software\untitled\cmake-build-debug\CMakeFiles\CMakeTmp\cmTC_99ffb.pdb'; check for insufficient disk space, invalid path, or insufficient privilege
+NMAKE : fatal error U1077: '"C:\Program Files\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe"' : return code '0xffffffff'
+Stop.
+NMAKE : fatal error U1077: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\bin\HostX86\x86\nmake.exe"' : return code '0x2'
+Stop.
+
+
