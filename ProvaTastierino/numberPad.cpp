@@ -28,25 +28,28 @@ void NumberPad::write(bool nA, bool nB, bool nC){
 int NumberPad::read(){
     if(!digitalRead(D))
         return 0;
-    else if(!digitalRead(E))
+    if(!digitalRead(E))
         return 1;
-    else if (!digitalRead(F))
+    if (!digitalRead(F))
         return 2;
-    else if (!digitalRead(G))
+    if (!digitalRead(G))
         return 3;
-    else
-        return 4;
+    
+    return 4;
 }
 
-unsigned int NumberPad::readKey(){
-    bool arrayColumn[3];
-    unsigned int row = 4, column;
+int NumberPad::readKey(){
+    bool arrayColumn[3] = {true, true, true};
+    int row = 4, column = 4;
     while(row == 4){
-      for(column=0; column < 3; column++){
-        for(int i=0; i < 3; i++) arrayColumn[i]  = true;
-        arrayColumn[column] = false;
+      for(int j = 0; j < 3 && row == 4; j++){
+        
+        for(int i = 0; i < 3; i++) arrayColumn[i]  = true;
+        arrayColumn[j] = false;
         write(arrayColumn[0], arrayColumn[1], arrayColumn[2]);
+        
         row = read();
+        if(row != 4) column = j;
       }
     }
     return numbers[row][column];
