@@ -1,0 +1,10 @@
+# Folder config file
+[Dd]esktop.ini
+
+# Multisim files
+*.log
+*(Security copy)
+
+# CMake files
+CMakeLists.txt
+cmake-build-debug/
