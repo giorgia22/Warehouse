@@ -1,6 +1,6 @@
 #include "StepperMotors.h"
 
-StepperMotors::StepperMotors(unsigned int phase1, unsigned int phase2, unsigned int phase3, unsigned int phase4) {
+StepperMotors::StepperMotors(byte phase1, byte phase2, byte phase3, byte phase4) {
     this->phase1 = phase1;
     this->phase2 = phase2;
     this->phase3 = phase3;
@@ -21,7 +21,7 @@ void StepperMotors::write(bool p1, bool p2, bool p3, bool p4){
     digitalWrite (phase4, p4);
 }
 
-void StepperMotors::move(bool orientation, int degrees) {
+void StepperMotors::move(bool orientation, float degrees) {
     unsigned int array[4]={0,0,0,0};
     if(!orientation){
         for(float i=0; i<degrees; i+=7.2){
@@ -46,7 +46,7 @@ void StepperMotors::move(bool orientation, int degrees) {
 }
 
 
-void StepperMotors::moveCm(bool orientation, int centimeters) {
+void StepperMotors::moveCm(bool orientation, float centimeters) {
     int degreesCm = 180*centimeters/cm180degrees;
     move(orientation, degreesCm);
 }
