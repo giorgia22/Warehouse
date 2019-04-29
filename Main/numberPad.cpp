@@ -1,4 +1,4 @@
-#include "numberPad.h"
+#include "NumberPad.h"
 NumberPad::NumberPad(byte pins[7]){
     this->pins[0] = pins[0];
     this->pins[1] = pins[1];
