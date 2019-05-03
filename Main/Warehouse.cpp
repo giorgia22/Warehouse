@@ -7,6 +7,10 @@ void Warehouse::begin() {
   display.begin();
   numberPad.begin();
   moviment.begin();
+  pinMode(FC1_PIN, INPUT_PULLUP);
+  pinMode(FC2_PIN, INPUT_PULLUP);
+  pinMode(FC3_PIN, INPUT_PULLUP);
+  pinMode(FC4_PIN, INPUT_PULLUP);
 }
 
 void Warehouse::draw(){

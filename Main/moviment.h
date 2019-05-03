@@ -10,10 +10,10 @@ public:
     void begin();
     void pickUp ();
     void putDown ();
-    void moveToCell();
-    void moveToArea();
+    void moveToCell(int row, int column);
+    void moveToArea(bool area);
     void move (bool orientation, float degrees);
-    void moveCm(bool orientation, float centimeters);
+    void moveCm (bool orientation, float centimeters);
 
 private:
     byte phasesX[4] = {H_BRIDGE1_PH1_PIN, H_BRIDGE1_PH2_PIN, H_BRIDGE1_PH3_PIN, H_BRIDGE1_PH4_PIN};

@@ -31,9 +31,15 @@
 #define FC3_PIN A14
 #define FC4_PIN A15
 
-#define UP 1
-#define DOWN 0
-#define RIGHT 1
-#define LEFT 0
+#define UP true
+#define DOWN false
+#define RIGHT true
+#define LEFT false
+
+#define LOAD 0
+#define UNLOAD 1
+
+#define DISTANCE_BETWEEN_CELLS_X 0
+#define DISTANCE_BETWEEN_CELLS_Y 0
 
 #endif

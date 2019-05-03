@@ -14,6 +14,7 @@ public:
 
 private:
     byte phasesPins[4];
+    int actualPhase=0;
     unsigned int timeDelay=17;
     float cm180degrees=1.9;
 
