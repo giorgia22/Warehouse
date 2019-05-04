@@ -5,10 +5,10 @@
 #define WAREHOUSE_CELLS_X 3
 #define WAREHOUSE_CELLS_Y 3
 
-#define H_BRIDGE1_PH1_PIN 12
-#define H_BRIDGE1_PH2_PIN 11
+#define H_BRIDGE1_PH1_PIN 8
+#define H_BRIDGE1_PH2_PIN 9
 #define H_BRIDGE1_PH3_PIN 10
-#define H_BRIDGE1_PH4_PIN 9
+#define H_BRIDGE1_PH4_PIN 11
 
 #define H_BRIDGE2_PH1_PIN 42
 #define H_BRIDGE2_PH2_PIN 44
@@ -31,10 +31,10 @@
 #define FC3_PIN A14
 #define FC4_PIN A15
 
-#define UP true
-#define DOWN false
-#define RIGHT true
-#define LEFT false
+#define UP 0
+#define DOWN 1
+#define RIGHT 0
+#define LEFT 1
 
 #define LOAD 0
 #define UNLOAD 1

@@ -5,7 +5,7 @@
 
 class StepperMotor {
 public:
-    StepperMotor (byte phasesPins[4]);
+    StepperMotor (byte phase1, byte phase2, byte phase3, byte phase4);
     void begin ();
     void move (bool orientation, float degrees);
     void moveCm(bool orientation, float centimeters);
@@ -13,12 +13,11 @@ public:
     
 
 private:
-    byte phasesPins[4];
-    int actualPhase=0;
-    unsigned int timeDelay=17;
+    byte phase1, phase2, phase3, phase4;
+    unsigned int timeDelay=3;
     float cm180degrees=1.9;
 
-    void write (bool phasesValues[4]);
+    void write (bool p1, bool p2, bool p3, bool p4);
 };
 
 #endif

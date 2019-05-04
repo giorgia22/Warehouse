@@ -1,21 +1,17 @@
 
 #include <Arduino.h>
-#include <openGLCD.h>
-#include "definitions.h"
+#include "StepperMotor.h"
 #include "Warehouse.h"
 
-Warehouse warehouse;
+StepperMotor motorX((byte)H_BRIDGE1_PH1_PIN, (byte)H_BRIDGE1_PH2_PIN, (byte)H_BRIDGE1_PH3_PIN, (byte)H_BRIDGE1_PH4_PIN);
 
 void setup() {
-  warehouse.begin();
-  warehouse.downloadEEPROM();
-  warehouse.draw();
-  delay(200);
+  motorX.begin();
 }
 
 void loop() {
-  warehouse.move(RIGHT, 180);
-  delay(500);
-  warehouse.move(LEFT, 180);
-  delay(500);
+  motorX.move(true, 180);
+  delay(200);
+  motorX.move(false, 180);
+  delay(200);
 }
