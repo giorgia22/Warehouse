@@ -6,7 +6,7 @@
 #include "definitions.h"
 #include "NumberPad.h"
 #include "StepperMotor.h"
-#include "moviment.h"
+#include "Moviment.h"
 #include "Display.h"
 
 class Warehouse {
@@ -16,7 +16,7 @@ public:
     void draw();
     void downloadEEPROM();
     void uploadEEPROM();
-    void move (bool orientation, float degrees);
+    void move (byte direction, float degrees);
 
 private:
     byte numberPadPins[7]={NUMBER_PAD_A_PIN, NUMBER_PAD_B_PIN, NUMBER_PAD_C_PIN, NUMBER_PAD_D_PIN, NUMBER_PAD_E_PIN, NUMBER_PAD_F_PIN, NUMBER_PAD_G_PIN};

@@ -1,4 +1,4 @@
-#include "moviment.h"
+#include "Moviment.h"
 
 Moviment::Moviment(){
 }
@@ -10,8 +10,9 @@ void Moviment::begin(){
   pinMode(ACTUATOR_NEG_PIN, OUTPUT);
 }
 
-void Moviment::move(bool orientation, float degrees){
-  motorX.move(orientation, degrees);
+void Moviment::move(byte direction, float degrees){
+  if(direction==LEFT || direction==RIGHT) motorX.move(4-direction, degrees);
+  else if(direction==UP || direction==DOWN) motorY.move(2-direction, degrees);
 }
 
 void Moviment::moveToCell(int row, int column){

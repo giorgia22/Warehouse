@@ -13,13 +13,13 @@ public:
     void putDown ();
     void moveToCell(int row, int column);
     void moveToArea(bool area);
-    void move(bool orientation, float degrees);
+    void move(byte direction, float degrees);
 
 private:
-    //byte motorXPins[4]={H_BRIDGE1_PH1_PIN, H_BRIDGE1_PH2_PIN, H_BRIDGE1_PH3_PIN, H_BRIDGE1_PH4_PIN};
-    //byte motorYPins[4]={H_BRIDGE2_PH1_PIN, H_BRIDGE2_PH2_PIN, H_BRIDGE2_PH3_PIN, H_BRIDGE2_PH4_PIN};
-    StepperMotor motorX = StepperMotor(H_BRIDGE1_PH1_PIN, H_BRIDGE1_PH2_PIN, H_BRIDGE1_PH3_PIN, H_BRIDGE1_PH4_PIN);
-    StepperMotor motorY = StepperMotor(H_BRIDGE2_PH1_PIN, H_BRIDGE2_PH2_PIN, H_BRIDGE2_PH3_PIN, H_BRIDGE2_PH4_PIN);
+    byte motorXPins[4]={H_BRIDGE1_PH1_PIN, H_BRIDGE1_PH2_PIN, H_BRIDGE1_PH3_PIN, H_BRIDGE1_PH4_PIN};
+    byte motorYPins[4]={H_BRIDGE2_PH1_PIN, H_BRIDGE2_PH2_PIN, H_BRIDGE2_PH3_PIN, H_BRIDGE2_PH4_PIN};
+    StepperMotor motorX = StepperMotor(motorXPins);
+    StepperMotor motorY = StepperMotor(motorYPins);
 
 };
 

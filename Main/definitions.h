@@ -31,10 +31,10 @@
 #define FC3_PIN A14
 #define FC4_PIN A15
 
-#define UP 0
-#define DOWN 1
-#define RIGHT 0
-#define LEFT 1
+#define UP 1
+#define DOWN 2
+#define RIGHT 3
+#define LEFT 4
 
 #define LOAD 0
 #define UNLOAD 1

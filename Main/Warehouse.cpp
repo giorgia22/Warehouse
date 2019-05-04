@@ -37,6 +37,6 @@ void Warehouse::uploadEEPROM(){
   }
 }
 
-void Warehouse::move(bool orientation, float degrees){
-  moviment.move(orientation, degrees);
+void Warehouse::move(byte direction, float degrees){
+  moviment.move(direction, degrees);
 }
