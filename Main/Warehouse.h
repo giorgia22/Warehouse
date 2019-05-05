@@ -17,6 +17,11 @@ public:
     void downloadEEPROM();
     void uploadEEPROM();
     void move (byte direction, float degrees);
+    bool requestModality();
+    void conversionOfMatrix(bool modality, bool oldModality);
+    byte requestReset();
+    void resetMatrix();
+    void initializeMatrix();
 
 private:
     byte numberPadPins[7]={NUMBER_PAD_A_PIN, NUMBER_PAD_B_PIN, NUMBER_PAD_C_PIN, NUMBER_PAD_D_PIN, NUMBER_PAD_E_PIN, NUMBER_PAD_F_PIN, NUMBER_PAD_G_PIN};

@@ -40,3 +40,23 @@ void Warehouse::uploadEEPROM(){
 void Warehouse::move(byte direction, float degrees){
   moviment.move(direction, degrees);
 }
+
+bool Warehouse::requestModality(){
+  
+}
+
+void Warehouse::conversionOfMatrix(bool modality, bool oldModality){
+  
+}
+
+byte Warehouse::requestReset(){
+  
+}
+
+void Warehouse::resetMatrix(){
+  
+}
+
+void Warehouse::initializeMatrix(){
+  
+}

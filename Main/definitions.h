@@ -23,6 +23,9 @@
 #define NUMBER_PAD_F_PIN 7
 #define NUMBER_PAD_G_PIN 8
 
+#define AVANT 11
+#define ARROW 10
+
 #define ACTUATOR_POS_PIN 38
 #define ACTUATOR_NEG_PIN 40
 
@@ -41,5 +44,15 @@
 
 #define DISTANCE_BETWEEN_CELLS_X 0
 #define DISTANCE_BETWEEN_CELLS_Y 0
+
+#define MANUAL 0
+#define AUTOMATIC 1
+#define INITIALIZATION 2
+
+#define DISTANCE_0to1_COLUMN 950
+#define DISTANCE_1to2_COLUMN 950
+#define DISTANCE_2to3_COLUMN 950
+#define DISTANCE_0to1_ROW 4900
+#define DISTANCE_1to2_ROW 4900
 
 #endif

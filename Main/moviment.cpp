@@ -15,7 +15,7 @@ void Moviment::move(byte direction, float degrees){
   else if(direction==UP || direction==DOWN) motorY.move(2-direction, degrees);
 }
 
-void Moviment::moveToCell(int row, int column){
+void Moviment::moveToCell(int row, int column, int actualRow, int actualColumn){
   while(digitalRead(FC1_PIN)) motorX.move(LEFT, 1.8);
   while(digitalRead(FC3_PIN)) motorY.move(DOWN, 1.8);
 
