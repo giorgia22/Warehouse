@@ -26,19 +26,18 @@ struct pallet {
 
 Warehouse warehouse;
 
-
 void setup() {
   warehouse.begin();
   motorX.begin();
   warehouse.downloadEEPROM();
   oldModality = EEPROM[9];
-  modality = warehouse.requestModality();                                         //stampare sul display "scegliere modalità: 0.manuale 1.automatica", aspettare bottone premuto, return modalità
+  warehouse.draw();
+  /*modality = warehouse.requestModality();                                         //stampare sul display "scegliere modalità: 0.manuale 1.automatica", aspettare bottone premuto, return modalità
   if(modality!=oldModality) warehouse.conversionOfMatrix(modality, oldModality);  //se mod=man e oldMod=auto ->matrix trasformata in 1 e 0, se mod=auto e oldMod=man -> matrix trasformata in da 0 a 9
   reset = warehouse.requestReset();                                               //stampare sul display "scegliere rest: 0.no reset 1.reset(tutto=0) 2.inizz.(spostamento per il magazzino)", aspettare bbottone e return
   if(reset==1) warehouse.resetMatrix();                                           //portare a 0 tutte le celle di matrix
-  else if(reset==INITIALIZATION) warehouse.initializeMatrix();                    //spostare il braccio per tutto il maggazzino e rilevare i pallet
+  else if(reset==INITIALIZATION) warehouse.initializeMatrix();  */                  //spostare il braccio per tutto il maggazzino e rilevare i pallet
 }
 
 void loop() {
-  
 }
