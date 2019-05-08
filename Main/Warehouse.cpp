@@ -21,7 +21,10 @@ void Warehouse::downloadEEPROM(){
   int l=0;
   for(int i=0; i<WAREHOUSE_CELLS_X; i++){
     for(int j=0; j<WAREHOUSE_CELLS_Y; j++){
-      matrix[i][j] = EEPROM[l];
+      if(EEPROM[l]<10)
+        matrix[i][j] = EEPROM[l];
+      else
+        matrix[i][j] = 0;
       l++;
     }
   }
@@ -42,11 +45,33 @@ void Warehouse::move(byte direction, float degrees){
 }
 
 bool Warehouse::requestModality(){
-  
+  display.printModality();
+  unsigned int mod=2;
+  while(mod>1)
+    mod=numberPad.readKey();
+  return mod;
 }
 
 void Warehouse::conversionOfMatrix(bool modality, bool oldModality){
-  
+  if(modality==MANUAL && oldModality==AUTOMATIC){
+    for(int i=0; i<WAREHOUSE_CELLS_X; i++){
+      for(int j=0; j<WAREHOUSE_CELLS_Y; j++){
+        if(matrix[i][j]!=0)
+          matrix[i][j]=1;
+      }
+    }
+  }
+  else{
+    int ultimoPallet=1;
+    for(int i=0; i<WAREHOUSE_CELLS_X; i++){
+      for(int j=0; j<WAREHOUSE_CELLS_Y; j++){
+        if(matrix[i][j]==1){
+          matrix[i][j]=ultimoPallet;
+          ultimoPallet++;
+        }
+      }
+    }
+  }
 }
 
 byte Warehouse::requestReset(){

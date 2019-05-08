@@ -9,6 +9,7 @@ public:
     Display ();
     void begin ();
     void drawWarehouse(int lato, int matrix[3][3]);
+    void printModality();
 
 private:
 

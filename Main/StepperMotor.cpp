@@ -25,6 +25,8 @@ void StepperMotor::move(bool orientation, float degrees) {
               j++;
               if(j==4) j=0;
         }
+    for(unsigned int l=0; l<4; l++) phasesValues[l]=0;
+    write(phasesValues);
 }
 
 
