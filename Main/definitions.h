@@ -34,16 +34,13 @@
 #define FC3_PIN A14
 #define FC4_PIN A15
 
-#define UP 1
-#define DOWN 2
-#define RIGHT 3
-#define LEFT 4
+#define UP 0
+#define DOWN 1
+#define RIGHT 2
+#define LEFT 3
 
 #define LOAD 0
 #define UNLOAD 1
-
-#define DISTANCE_BETWEEN_CELLS_X 0
-#define DISTANCE_BETWEEN_CELLS_Y 0
 
 #define MANUAL 0
 #define AUTOMATIC 1
@@ -54,5 +51,31 @@
 #define DISTANCE_2to3_COLUMN 950
 #define DISTANCE_0to1_ROW 4900
 #define DISTANCE_1to2_ROW 4900
+#define PALLET_VERTICAL_DISTANCE 500
+
+
+struct pallet {
+  int row;
+  int column;
+}pallets[]{
+  {3, 3}, //pallet N°1
+  {3, 3}, //pallet N°2
+  {3, 3}, //pallet N°3
+  {3, 3}, //pallet N°4
+  {3, 3}, //pallet N°5
+  {3, 3}, //pallet N°6
+  {3, 3}, //pallet N°7
+  {3, 3}, //pallet N°8
+  {3, 3}, //pallet N°9
+};
+
+
+byte loadCell[2]={0, 3};
+byte unloadCell[2]={1, 3};
+
+#define PRINT_MODALITY 0
+#define PRINT_RESET 1
+#define PRINT_ROW 2
+#define PRINT_COLUMN 3
 
 #endif

@@ -1,4 +1,5 @@
 #include "Display.h"
+#include "definitions.h"
 
 Display::Display() {}
 
@@ -18,20 +19,58 @@ void Display::drawWarehouse(int lato, int matrix[3][3]){
     int column=0;
     for(int x=1; x<8; x=x+3){
       GLCD.CursorTo(x, y);
-      GLCD.print(matrix[row][column]);
+      GLCD.print(matrix[2-row][2-column]);
       column++;
     }
   row++;
   }
 }
 
-void Display::printModality(){
-  GLCD.CursorTo(9,0);
-  GLCD.print("Inserire");
-  GLCD.CursorTo(9,1);
-  GLCD.print("modalita':");
-  GLCD.CursorTo(9,3);
-  GLCD.print("0.manuale");
-  GLCD.CursorTo(9,4);
-  GLCD.print("1.automatica");
+void Display::print(byte variable){
+  switch (variable){
+    case PRINT_MODALITY:
+      GLCD.CursorTo(0,0);
+      GLCD.print("Inserire modalita'");
+      GLCD.CursorTo(0,1);
+      GLCD.print("di funzionamento:");
+      GLCD.CursorTo(0,3);
+      GLCD.print("0.manuale");
+      GLCD.CursorTo(0,4);
+      GLCD.print("1.automatica");
+      break;
+      
+    case PRINT_RESET:
+      GLCD.CursorTo(9,0);
+      GLCD.print("Inserire");
+      GLCD.CursorTo(9,1);
+      GLCD.print("modalita' di");
+      GLCD.CursorTo(9,2);
+      GLCD.print("resettaggio:");
+      GLCD.CursorTo(9,4);
+      GLCD.print("0.no reset");
+      GLCD.CursorTo(9,5);
+      GLCD.print("1.reset");
+      GLCD.CursorTo(9,6);
+      GLCD.print("2.inizializ=");
+      GLCD.CursorTo(9,7);
+      GLCD.print("zazione");
+      break;
+      
+    case PRINT_ROW:
+      GLCD.CursorTo(0,0);
+      GLCD.print("Inserire riga:");
+      break;
+      
+    case PRINT_COLUMN:
+      GLCD.CursorTo(0,0);
+      GLCD.print("Inserire colonna:");
+      break;
+      
+    default:
+      break;
+  }
+}
+
+void Display::clear(){
+  GLCD.ClearScreen();
 }
