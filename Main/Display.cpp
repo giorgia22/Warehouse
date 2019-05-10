@@ -65,6 +65,12 @@ void Display::print(byte variable){
       GLCD.CursorTo(0,0);
       GLCD.print("Inserire colonna:");
       break;
+
+    case PRINT_PALLET:
+      GLCD.CursorTo(9,0);
+      GLCD.print("Inserire ");
+      GLCD.CursorTo(9,1);
+      GLCD.print("n pallet:");
       
     default:
       break;

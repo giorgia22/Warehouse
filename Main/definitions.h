@@ -53,29 +53,10 @@
 #define DISTANCE_1to2_ROW 4900
 #define PALLET_VERTICAL_DISTANCE 500
 
-
-struct pallet {
-  int row;
-  int column;
-}pallets[]{
-  {3, 3}, //pallet N°1
-  {3, 3}, //pallet N°2
-  {3, 3}, //pallet N°3
-  {3, 3}, //pallet N°4
-  {3, 3}, //pallet N°5
-  {3, 3}, //pallet N°6
-  {3, 3}, //pallet N°7
-  {3, 3}, //pallet N°8
-  {3, 3}, //pallet N°9
-};
-
-
-byte loadCell[2]={0, 3};
-byte unloadCell[2]={1, 3};
-
 #define PRINT_MODALITY 0
 #define PRINT_RESET 1
 #define PRINT_ROW 2
 #define PRINT_COLUMN 3
+#define PRINT_PALLET 4
 
 #endif

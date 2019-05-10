@@ -26,6 +26,8 @@ private:
 
     float distance(bool direction, byte a, byte b);
 
+    byte loadCell[2]={0, 3};
+    byte unloadCell[2]={1, 3};
     
 };
 

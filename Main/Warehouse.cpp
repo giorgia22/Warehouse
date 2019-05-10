@@ -90,6 +90,9 @@ byte Warehouse::request(byte variable){
     case PRINT_COLUMN:
       limit=3;
       break;
+    case PRINT_PALLET:
+      limit=10;
+      break;
     default:
       break;
   }
@@ -144,4 +147,22 @@ void Warehouse::getPallet(byte actualCell[2], byte destinationCell[2]){
 
 bool Warehouse::isCellEmpty(byte cell[2]){
   return (matrix[cell[0]][cell[1]]==0);
+}
+
+byte Warehouse::getRow(){
+  byte row=firstCellFree[0];
+  if(row==2)
+    firstCellFree[0]=0;
+  else
+    firstCellFree[0]--;
+  return row;
+}
+
+byte Warehouse::getColumn(){
+  byte column=firstCellFree[1];
+  if (column==0)
+    firstCellFree[1]=2;
+  else
+    firstCellFree[1]++;
+  return column;
 }
