@@ -6,32 +6,28 @@ Moviment::Moviment(){
 void Moviment::begin(){
   motorX.begin();
   motorY.begin();
-  while(digitalRead(FC3_PIN)) motorY.move(DOWN, 1.8);
-  while(digitalRead(FC1_PIN)) motorX.move(LEFT, 1.8);
+  //while(!digitalRead(FC3_PIN)) motorY.move(DOWN, 1.8);
+  //while(!digitalRead(FC1_PIN)) motorX.move(LEFT, 1.8);
   pinMode(ACTUATOR_POS_PIN, OUTPUT);
   pinMode(ACTUATOR_NEG_PIN, OUTPUT);
 }
 
 void Moviment::move(byte direction, float degrees){
-  if(direction==LEFT || direction==RIGHT) motorX.move(4-direction, degrees);
-  else if(direction==UP || direction==DOWN) motorY.move(2-direction, degrees);
+  if(direction == LEFT || direction == RIGHT) motorX.move(direction%2, degrees);
+  else if(direction == UP || direction == DOWN) motorY.move(direction%2, degrees);
 }
 
 void Moviment::moveBetweenCells(byte fromCell[2], byte toCell[2]){
-  byte row=0;
-  byte column=1;
-  if(fromCell[row] < toCell[row])
-    move(UP, distance(true, fromCell[row], toCell[row]));
-  if(fromCell[row] > toCell[row])
-    move(DOWN, distance(true, fromCell[row], toCell[row]));
-  if(fromCell[column] < toCell[column])
-    move(RIGHT, distance(false, fromCell[column], toCell[column]));
-  if(fromCell[column] > toCell[column])
-    move(LEFT, distance(false, fromCell[column], toCell[column]));
+  byte row = 0;
+  byte column = 1;
+  if(fromCell[column] < toCell[column])   move(LEFT, distance(false, fromCell[column], toCell[column]));
+  if(fromCell[column] > toCell[column])   move(RIGHT, distance(false, fromCell[column], toCell[column]));
+  if(fromCell[row] < toCell[row])         move(UP, distance(true, fromCell[row], toCell[row]));
+  if(fromCell[row] > toCell[row])         move(DOWN, distance(true, fromCell[row], toCell[row]));
 }
 
 float Moviment::distance(bool direction, byte a, byte b){
-  int distance=0;
+  int distance = 0;
   byte greater = max(a, b);
   byte smaller = min(a, b);
   while(smaller < greater){
@@ -52,16 +48,17 @@ void Moviment::actuator(bool pos, bool neg){
 
 void Moviment::pickPallet(bool direction){
   actuator(true, false);
-  delay(10000);
+  delay(TIME_ACTUATOR);
+  actuator(false, false);
   move(direction, PALLET_VERTICAL_DISTANCE);
   actuator(false, true);
-  delay(10000);
+  delay(TIME_ACTUATOR);
   actuator(false, false);
 }
 
 void Moviment::moveToStart(bool area){
   while(digitalRead(FC3_PIN)) motorY.move(DOWN, 1.8);
   while(digitalRead(FC1_PIN)) motorX.move(LEFT, 1.8);
-  if(area==UNLOAD)
+  if(area == UNLOAD)
     moveBetweenCells(loadCell, unloadCell);
 }

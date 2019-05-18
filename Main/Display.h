@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <openGLCD.h>
+#include "definitions.h"
 
 class Display {
 public:
@@ -13,7 +14,6 @@ public:
     void clear();
 
 private:
-
 
 };
 

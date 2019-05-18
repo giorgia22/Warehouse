@@ -8,14 +8,10 @@ public:
     StepperMotor (byte phasesPins[4]);
     void begin ();
     void move (bool orientation, float degrees);
-    void moveCm(bool orientation, float centimeters);
-
-    
 
 private:
     byte phasesPins[4];
-    unsigned int timeDelay=5;
-    float cm180degrees=1.9;
+    unsigned int timeDelay = 5;
 
     void write (bool phasesValues[4]);
 };
