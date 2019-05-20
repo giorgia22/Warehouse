@@ -13,7 +13,7 @@ public:
     void moveBetweenCells(byte fromCell[2], byte toCell[2]);
     void move(byte direction, float degrees);
     void actuator(bool pos, bool neg);
-    void moveToStart(bool area);
+    void moveToStart();
 
 private:
     byte motorXPins[4] = {H_BRIDGE1_PH1_PIN, H_BRIDGE1_PH2_PIN, H_BRIDGE1_PH3_PIN, H_BRIDGE1_PH4_PIN};

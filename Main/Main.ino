@@ -43,23 +43,29 @@ void setup() {
     oldModality = EEPROM[9];
   else
     oldModality = 0;
-    
-  modality = warehouse.request(PRINT_MODALITY);                                                                            //stampare sul display "scegliere modalità: 0.manuale 1.automatica", aspettare bottone premuto, return modalità
+     
+  modality = warehouse.startMenu();                                                                            //stampare sul display "scegliere modalità: 0.manuale 1.automatica", aspettare bottone premuto, return modalità
   if(modality != oldModality && (modality == 0 || modality == 1)) warehouse.conversionOfMatrix(modality, oldModality);     //se mod=man e oldMod=auto ->matrix trasformata in 1 e 0, se mod=auto e oldMod=man -> matrix trasformata in da 0 a 9
-  delay(200);
-  reset = warehouse.request(PRINT_RESET);                                                                                  //stampare sul display "scegliere reset: 0.no reset 1.reset(tutto=0) 2.inizz.(spostamento per il magazzino)", aspettare bottone e return
-  if(reset == 1) warehouse.resetMatrix();                                                                                  //portare a 0 tutte le celle di matrix
-  else if(reset == INITIALIZATION) warehouse.initializeMatrix();                                                           //spostare il braccio per tutto il maggazzino e rilevare i pallet
+  delay(200);                                                         //spostare il braccio per tutto il maggazzino e rilevare i pallet
   
-  if(modality == DEBUG) warehouse.print(PRINT_DEBUG);
-  delay(200);
+  warehouse.print(PRINT_START);
+  warehouse.moveToStart();
 }
 
 void loop() {
+restart:
     if(modality == MANUAL){
       destinationCell[0] = warehouse.request(PRINT_ROW);
+      if(destinationCell[0] == 10){
+        modality = warehouse.startMenu();
+        goto restart;
+      }
       delay(200);
       destinationCell[1] = warehouse.request(PRINT_COLUMN);
+      if(destinationCell[1] == 10){
+        modality = warehouse.startMenu();
+        goto restart;
+      }
       
       if(warehouse.isCellEmpty(destinationCell)){
         warehouse.storePallet(actualCell, destinationCell, 1);
@@ -77,6 +83,11 @@ void loop() {
     else if(modality == AUTOMATIC){
       warehouse.draw();
       num = warehouse.request(PRINT_PALLET);
+      if(num == 10){
+        modality = warehouse.startMenu();
+        goto restart;
+      }
+      
       if(pallets[num-1].row == 3 || pallets[num-1].column == 3){
         pallets[num-1].row = warehouse.getRow();
         pallets[num-1].column = warehouse.getColumn();
@@ -116,6 +127,10 @@ void loop() {
         case(6):
           moviment.actuator(0, 1);
           break;
+
+        case(10):
+          modality = warehouse.startMenu();
+          goto restart;
           
         default:
           moviment.actuator(0, 0);
@@ -123,5 +138,4 @@ void loop() {
       }
       delay(100);
     }
-    warehouse.uploadEEPROM();
 }

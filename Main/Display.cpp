@@ -63,6 +63,8 @@ void Display::print(byte variable){
       GLCD.print("Inserire");
       GLCD.CursorTo(9, 1);
       GLCD.print("riga");
+      GLCD.CursorTo(9, 7);
+      GLCD.print("<-START MENU'");
       break;
       
     case PRINT_COLUMN:
@@ -70,6 +72,8 @@ void Display::print(byte variable){
       GLCD.print("Inserire");
       GLCD.CursorTo(9, 1);
       GLCD.print("colonna");
+      GLCD.CursorTo(9, 7);
+      GLCD.print("<-START MENU'");
       break;
 
     case PRINT_PALLET:
@@ -77,6 +81,8 @@ void Display::print(byte variable){
       GLCD.print("Inserire ");
       GLCD.CursorTo(9, 1);
       GLCD.print("n pallet:");
+      GLCD.CursorTo(9, 7);
+      GLCD.print("<-START MENU'");
       break;
 
     case(PRINT_DEPOSITO):
@@ -110,6 +116,8 @@ void Display::print(byte variable){
       GLCD.print("5.ACTUATOR FOWARD");
       GLCD.CursorTo(0, 6);
       GLCD.print("6.ACTUATOR BACKWARD");
+      GLCD.CursorTo(9, 7);
+      GLCD.print("<-START MENU'");
       break;
 
     case(PRINT_BEGIN):
@@ -117,6 +125,13 @@ void Display::print(byte variable){
       GLCD.print("Avviamento del");
       GLCD.CursorTo(0, 1);
       GLCD.print("magazzino...");
+      break;
+
+    case(PRINT_START):
+      GLCD.CursorTo(0, 0);
+      GLCD.print("Posizionamento cella");
+      GLCD.CursorTo(0, 1);
+      GLCD.print("iniziale");
       break;
       
     default:

@@ -7,12 +7,7 @@ void Warehouse::begin() {
   display.begin();
   print(PRINT_BEGIN);
   numberPad.begin();
-  pinMode(FC1_PIN, INPUT_PULLUP);
-  pinMode(FC2_PIN, INPUT_PULLUP);
-  pinMode(FC3_PIN, INPUT_PULLUP);
-  pinMode(FC4_PIN, INPUT_PULLUP);
   moviment.begin();
-  
   moviment.actuator(false, true);
   delay(TIME_ACTUATOR);
   moviment.actuator(false, false);
@@ -72,7 +67,7 @@ void Warehouse::conversionOfMatrix(bool modality, bool oldModality){
   }
 }
 
-void Warehouse::print( byte variable){
+void Warehouse::print(byte variable){
   display.clear();
   display.print(variable);
 }
@@ -110,7 +105,7 @@ byte Warehouse::request(byte variable){
   }
   
   int var = 12;
-  while(var > (limit-1) ){
+  while(var > (limit-1) || var != 10){
       var = numberPad.readKey();
   }
   return var;
@@ -128,8 +123,10 @@ void Warehouse::initializeMatrix(){
   
 }
 
-void Warehouse::moveToStart(bool area){
-  moviment.moveToStart(area);
+void Warehouse::moveToStart(){
+  moviment.moveToStart();
+  moviment.move(RIGHT, 150);
+  moviment.move(UP, 80);
 }
 
 
@@ -145,7 +142,8 @@ void Warehouse::storePallet(byte actualCell[2], byte destinationCell[2], byte nu
   delay(500);
   moviment.moveBetweenCells(destinationCell, loadCell);     //sostituire con moveToStart quando ci saranno i finecorsa
   matrix[destinationCell[0]][destinationCell[1]]=numPallet;
-  display.clear();
+  draw();
+  uploadEEPROM();
 }
 
 void Warehouse::getPallet(byte actualCell[2], byte destinationCell[2]){
@@ -159,7 +157,8 @@ void Warehouse::getPallet(byte actualCell[2], byte destinationCell[2]){
   moviment.pickPallet(DOWN);
   delay(200);
   matrix[destinationCell[0]][destinationCell[1]]=0;
-  display.clear();
+  draw();
+  uploadEEPROM();
 }
 
 bool Warehouse::isCellEmpty(byte cell[2]){
@@ -182,4 +181,17 @@ byte Warehouse::getColumn(){
   else
     firstCellFree[1]++;
   return column;
+}
+
+byte Warehouse::startMenu(){
+  byte mod = request(PRINT_MODALITY);
+  
+  byte reset = request(PRINT_RESET);                                         //stampare sul display "scegliere reset: 0.no reset 1.reset(tutto=0) 2.inizz.(spostamento per il magazzino)", aspettare bottone e return
+  if(reset == 1) resetMatrix();                                         //portare a 0 tutte le celle di matrix
+  else if(reset == INITIALIZATION) initializeMatrix();  
+  
+  if(mod == DEBUG) print(PRINT_DEBUG);
+  delay(200);
+
+  return mod;
 }

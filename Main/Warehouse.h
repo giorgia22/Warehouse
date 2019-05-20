@@ -21,13 +21,14 @@ public:
     void conversionOfMatrix(bool modality, bool oldModality);
     void resetMatrix();
     void initializeMatrix();
-    void moveToStart(bool area);
+    void moveToStart();
     void storePallet(byte actualCell[2], byte destinationCell[2], byte numPallet);
     void getPallet(byte actualCell[2], byte destinationCell[2]);
     bool isCellEmpty(byte cell[2]);
     byte getRow();
     byte getColumn();
     void print(byte variable);
+    byte startMenu();
 
 private:
     byte numberPadPins[7]={NUMBER_PAD_A_PIN, NUMBER_PAD_B_PIN, NUMBER_PAD_C_PIN, NUMBER_PAD_D_PIN, NUMBER_PAD_E_PIN, NUMBER_PAD_F_PIN, NUMBER_PAD_G_PIN};

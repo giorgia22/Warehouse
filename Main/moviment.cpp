@@ -6,10 +6,12 @@ Moviment::Moviment(){
 void Moviment::begin(){
   motorX.begin();
   motorY.begin();
-  //while(!digitalRead(FC3_PIN)) motorY.move(DOWN, 1.8);
-  //while(!digitalRead(FC1_PIN)) motorX.move(LEFT, 1.8);
   pinMode(ACTUATOR_POS_PIN, OUTPUT);
   pinMode(ACTUATOR_NEG_PIN, OUTPUT);
+  pinMode(FC1_PIN, INPUT_PULLUP);
+  pinMode(FC2_PIN, INPUT_PULLUP);
+  pinMode(FC3_PIN, INPUT_PULLUP);
+  pinMode(FC4_PIN, INPUT_PULLUP);
 }
 
 void Moviment::move(byte direction, float degrees){
@@ -56,9 +58,7 @@ void Moviment::pickPallet(bool direction){
   actuator(false, false);
 }
 
-void Moviment::moveToStart(bool area){
-  while(digitalRead(FC3_PIN)) motorY.move(DOWN, 1.8);
-  while(digitalRead(FC1_PIN)) motorX.move(LEFT, 1.8);
-  if(area == UNLOAD)
-    moveBetweenCells(loadCell, unloadCell);
+void Moviment::moveToStart(){
+  while(analogRead(FC3_PIN) > 800) motorY.move(DOWN, 1.8);
+  while(analogRead(FC1_PIN) > 800) motorX.move(LEFT, 1.8);
 }

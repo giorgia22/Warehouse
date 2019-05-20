@@ -15,5 +15,3 @@ INPUT FNECORSA: HIGH > 800
 TODO LIST:
 -aggiungere pulsante reset
 -aggiungere led C13, scheda ON
--forare ultimo via
--allargare fori morsettiere

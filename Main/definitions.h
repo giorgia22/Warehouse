@@ -63,7 +63,8 @@
 #define PRINT_PRELIEVO 6
 #define PRINT_DEBUG 7
 #define PRINT_BEGIN 8
+#define PRINT_START 9
 
-#define TIME_ACTUATOR 12000
+#define TIME_ACTUATOR 13000
 
 #endif
