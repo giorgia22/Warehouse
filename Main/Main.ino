@@ -102,22 +102,24 @@ restart:
     }
     
     else if(modality == DEBUG){
+      warehouse.print(PRINT_DEBUG);
       byte button = numberPad.readKey();
+      int dist=300;
       switch (button){
         case(UP):
-          moviment.move(UP, 100);
+          moviment.move(UP, dist);
           break;
 
         case(DOWN):
-          moviment.move(DOWN, 100);
+          moviment.move(DOWN, dist);
           break;
           
         case(RIGHT):
-          moviment.move(RIGHT, 100);
+          moviment.move(RIGHT, dist);
           break;
           
         case(LEFT):
-          moviment.move(LEFT, 100);
+          moviment.move(LEFT, dist);
           break;
           
         case(5):
@@ -129,6 +131,7 @@ restart:
           break;
 
         case(10):
+          delay(200);
           modality = warehouse.startMenu();
           goto restart;
           

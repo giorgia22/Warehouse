@@ -59,6 +59,6 @@ void Moviment::pickPallet(bool direction){
 }
 
 void Moviment::moveToStart(){
-  while(analogRead(FC3_PIN) > 800) motorY.move(DOWN, 1.8);
-  while(analogRead(FC1_PIN) > 800) motorX.move(LEFT, 1.8);
+  while(analogRead(FC3_PIN) > 800) move(DOWN, 16.2);
+  while(analogRead(FC1_PIN) > 800) move(LEFT, 16.2);
 }

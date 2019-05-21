@@ -105,7 +105,7 @@ byte Warehouse::request(byte variable){
   }
   
   int var = 12;
-  while(var > (limit-1) || var != 10){
+  while(var > (limit-1) && var != 10){
       var = numberPad.readKey();
   }
   return var;
@@ -190,8 +190,6 @@ byte Warehouse::startMenu(){
   if(reset == 1) resetMatrix();                                         //portare a 0 tutte le celle di matrix
   else if(reset == INITIALIZATION) initializeMatrix();  
   
-  if(mod == DEBUG) print(PRINT_DEBUG);
-  delay(200);
 
   return mod;
 }

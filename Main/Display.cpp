@@ -112,11 +112,11 @@ void Display::print(byte variable){
       GLCD.print("2.LEFT");
       GLCD.CursorTo(0, 3);
       GLCD.print("3.RIGHT");
-      GLCD.CursorTo(0, 5);
+      GLCD.CursorTo(0, 4);
       GLCD.print("5.ACTUATOR FOWARD");
-      GLCD.CursorTo(0, 6);
+      GLCD.CursorTo(0, 5);
       GLCD.print("6.ACTUATOR BACKWARD");
-      GLCD.CursorTo(9, 7);
+      GLCD.CursorTo(5, 6);
       GLCD.print("<-START MENU'");
       break;
 
