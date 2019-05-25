@@ -37,8 +37,8 @@ private:
     Moviment moviment;
     
     int matrix[WAREHOUSE_CELLS_X][WAREHOUSE_CELLS_Y];
-    byte firstCellFree[2]={2,0};
-    byte lastCellFull[2]={3,3};
+    byte firstCellFree[2]={0, 3};
+    byte lastCellFull[2]={3, 3};
     byte loadCell[2]={0, 3};
     byte unloadCell[2]={1, 3};
 };

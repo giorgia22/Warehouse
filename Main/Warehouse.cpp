@@ -120,7 +120,16 @@ void Warehouse::resetMatrix(){
 }
 
 void Warehouse::initializeMatrix(){
-  
+  moviment.move(UP, 500);
+  byte from[2] = {0, 3}, to[2];
+  for(int i=0; i<3; i++){
+    from[0]= 1;
+    for(int mov=0; mov<3; mov++){
+      
+    }
+  }
+      moviment.moveBetweenCells(from, to);
+  moviment.move(DOWN, 500);
 }
 
 void Warehouse::moveToStart(){
@@ -141,7 +150,7 @@ void Warehouse::storePallet(byte actualCell[2], byte destinationCell[2], byte nu
   moviment.pickPallet(DOWN);
   delay(500);
   moviment.moveBetweenCells(destinationCell, loadCell);     //sostituire con moveToStart quando ci saranno i finecorsa
-  matrix[destinationCell[0]][destinationCell[1]]=numPallet;
+  matrix[destinationCell[0]][destinationCell[1]] = numPallet;
   draw();
   uploadEEPROM();
 }
@@ -184,6 +193,7 @@ byte Warehouse::getColumn(){
 }
 
 byte Warehouse::startMenu(){
+  delay(200);
   byte mod = request(PRINT_MODALITY);
   
   byte reset = request(PRINT_RESET);                                         //stampare sul display "scegliere reset: 0.no reset 1.reset(tutto=0) 2.inizz.(spostamento per il magazzino)", aspettare bottone e return
