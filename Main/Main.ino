@@ -71,6 +71,7 @@ restart:
         warehouse.storePallet(actualCell, destinationCell, 1);
         actualCell[0] = 0;
         actualCell[1] = 3;
+        warehouse.moveToStart();
       }
       
       else{
@@ -95,6 +96,16 @@ restart:
         destinationCell[1] = pallets[num-1].column;
         warehouse.storePallet(actualCell, destinationCell, num);
         actualCell[0] = 0;
+        actualCell[1] = 3;
+        warehouse.draw();
+      }
+      else{
+        destinationCell[0] = pallets[num-1].row;
+        destinationCell[1] = pallets[num-1].column;
+        warehouse.getPallet(actualCell, destinationCell);
+        pallets[num-1].row = 3;
+        pallets[num-1].column = 3;
+        actualCell[0] = 1;
         actualCell[1] = 3;
         warehouse.draw();
       }

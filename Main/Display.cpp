@@ -63,7 +63,7 @@ void Display::print(byte variable){
       GLCD.print("Inserire");
       GLCD.CursorTo(9, 1);
       GLCD.print("riga");
-      GLCD.CursorTo(9, 7);
+      GLCD.CursorTo(9, 6);
       GLCD.print("<-START MENU'");
       break;
       
@@ -72,7 +72,7 @@ void Display::print(byte variable){
       GLCD.print("Inserire");
       GLCD.CursorTo(9, 1);
       GLCD.print("colonna");
-      GLCD.CursorTo(9, 7);
+      GLCD.CursorTo(9, 6);
       GLCD.print("<-START MENU'");
       break;
 
@@ -81,15 +81,15 @@ void Display::print(byte variable){
       GLCD.print("Inserire ");
       GLCD.CursorTo(9, 1);
       GLCD.print("n pallet:");
-      GLCD.CursorTo(9, 7);
+      GLCD.CursorTo(9, 6);
       GLCD.print("<-START MENU'");
       break;
 
     case(PRINT_DEPOSITO):
       GLCD.CursorTo(0, 0);
-      GLCD.print("Deposizione del pallet");
+      GLCD.print("Deposizione del");
       GLCD.CursorTo(0, 1);
-      GLCD.print("nel magazzino.");
+      GLCD.print("pallet nel magazzino.");
       GLCD.CursorTo(0, 3);
       GLCD.print("Attendere...");
       break;

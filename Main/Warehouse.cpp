@@ -120,22 +120,48 @@ void Warehouse::resetMatrix(){
 }
 
 void Warehouse::initializeMatrix(){
-  moviment.move(UP, 500);
-  byte from[2] = {0, 3}, to[2];
+  moveToStart();
+  moviment.move(UP, 200);
+  byte from[2]={0, 3}, to[2];
+  
   for(int i=0; i<3; i++){
-    from[0]= 1;
+    int j = 3;
+    if (i == 2) j = 2;
+    else if (i == 1) j = 0;
+   
+    to[0] = i;
+    from[1] = j;
+    to[1] = j-1;
+    
+    if(i != 0){
+      from[0] = i-1;
+      to[1] = j;
+    }
+    
     for(int mov=0; mov<3; mov++){
-      
+      moviment.moveBetweenCells(from, to);
+      from[0] = i;
+      delay(200);
+      if(i%2 == 0){
+        j--;
+        from[1] = j;
+        to[1] = j-1;
+      }
+      else{
+        j++;
+        from[1] = j;
+        to[1] = j+1;
+      }
     }
   }
-      moviment.moveBetweenCells(from, to);
+  
   moviment.move(DOWN, 500);
 }
 
 void Warehouse::moveToStart(){
   moviment.moveToStart();
-  moviment.move(RIGHT, 150);
-  moviment.move(UP, 80);
+  moviment.move(RIGHT, 100);
+  moviment.move(UP, 30);
 }
 
 
@@ -176,9 +202,7 @@ bool Warehouse::isCellEmpty(byte cell[2]){
 
 byte Warehouse::getRow(){
   byte row = firstCellFree[0];
-  if(row == 2)
-    firstCellFree[0] = 0;
-  else
+  if(firstCellFree[1] == 0)
     firstCellFree[0]--;
   return row;
 }
@@ -188,14 +212,14 @@ byte Warehouse::getColumn(){
   if (column == 0)
     firstCellFree[1] = 2;
   else
-    firstCellFree[1]++;
+    firstCellFree[1]--;
   return column;
 }
 
 byte Warehouse::startMenu(){
   delay(200);
   byte mod = request(PRINT_MODALITY);
-  
+  delay(200);
   byte reset = request(PRINT_RESET);                                         //stampare sul display "scegliere reset: 0.no reset 1.reset(tutto=0) 2.inizz.(spostamento per il magazzino)", aspettare bottone e return
   if(reset == 1) resetMatrix();                                         //portare a 0 tutte le celle di matrix
   else if(reset == INITIALIZATION) initializeMatrix();  

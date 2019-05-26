@@ -11,7 +11,7 @@ public:
 
 private:
     byte phasesPins[4];
-    unsigned int timeDelay = 5;
+    unsigned int timeDelay = 4;
 
     void write (bool phasesValues[4]);
 };
