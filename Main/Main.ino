@@ -56,13 +56,17 @@ void loop() {
 restart:
     if(modality == MANUAL){
       destinationCell[0] = warehouse.request(PRINT_ROW);
-      if(destinationCell[0] == 10){
+      if(destinationCell[0] == MENU){
+        actualCell[0] = 0;
+        actualCell[1] = 3;
         modality = warehouse.startMenu();
         goto restart;
       }
       delay(200);
       destinationCell[1] = warehouse.request(PRINT_COLUMN);
-      if(destinationCell[1] == 10){
+      if(destinationCell[1] == MENU){
+        actualCell[0] = 0;
+        actualCell[1] = 3;
         modality = warehouse.startMenu();
         goto restart;
       }
@@ -84,7 +88,9 @@ restart:
     else if(modality == AUTOMATIC){
       warehouse.draw();
       num = warehouse.request(PRINT_PALLET);
-      if(num == 10){
+      if(num == MENU){
+        actualCell[0] = 0;
+        actualCell[1] = 3;
         modality = warehouse.startMenu();
         goto restart;
       }
@@ -133,16 +139,18 @@ restart:
           moviment.move(LEFT, dist);
           break;
           
-        case(5):
+        case(ACTUATOR_FOWARD):
           moviment.actuator(1, 0);
           break;
           
-        case(6):
+        case(ACTUATOR_BACKWARD):
           moviment.actuator(0, 1);
           break;
 
-        case(10):
+        case(MENU):
           delay(200);
+          actualCell[0] = 0;
+          actualCell[1] = 3;
           modality = warehouse.startMenu();
           goto restart;
           
@@ -151,5 +159,68 @@ restart:
           break;
       }
       delay(100);
+    }
+    
+    else if(modality == MEASURES){
+      warehouse.print(PRINT_MEASURES);
+      byte button = numberPad.readKey();
+      
+      switch (button){
+        case(UP):
+          if(actualCell[0] != 2) destinationCell[0] = actualCell[0]+1;
+          destinationCell[1] = actualCell[1];
+          break;
+
+        case(DOWN):
+          if(actualCell[0] != 0) destinationCell[0] = actualCell[0]-1;
+          destinationCell[1] = actualCell[1];
+          break;
+          
+        case(RIGHT):
+          if(actualCell[1] != 0) destinationCell[1] = actualCell[1]-1;
+          destinationCell[0] = actualCell[0];
+          break;
+          
+        case(LEFT):
+          if(actualCell[1] != 3) destinationCell[1] = actualCell[1]+1;
+          destinationCell[0] = actualCell[0];
+          break;
+          
+        case(ACTUATOR_FOWARD):
+          moviment.actuator(1, 0);
+          delay(TIME_ACTUATOR);
+          moviment.actuator(0, 0);
+          break;
+          
+        case(ACTUATOR_BACKWARD):
+          moviment.actuator(0, 1);
+          delay(TIME_ACTUATOR);
+          moviment.actuator(0, 0);
+          break;
+          
+        case(PALLET_UP_DOWN):
+          moviment.move(UP, PALLET_VERTICAL_DISTANCE);
+          delay(1000);
+          moviment.move(DOWN, PALLET_VERTICAL_DISTANCE);
+          break;
+
+        case(MENU):
+          delay(200);
+          actualCell[0] = 0;
+          actualCell[1] = 3;
+          modality = warehouse.startMenu();
+          goto restart;
+          
+        default:
+          moviment.actuator(0, 0);
+          break;
+      }
+      if(button == UP || button == DOWN || button == LEFT || button == RIGHT){
+        moviment.moveBetweenCells(actualCell, destinationCell);
+        actualCell[0] = destinationCell[0];
+        actualCell[1] = destinationCell[1];
+      }
+      delay(100);
+      
     }
 }

@@ -38,6 +38,10 @@
 #define DOWN 1 
 #define RIGHT 3
 #define LEFT 2 
+#define ACTUATOR_FOWARD 4
+#define ACTUATOR_BACKWARD 5
+#define PALLET_UP_DOWN 6
+#define MENU 10
 
 #define LOAD 0
 #define UNLOAD 1
@@ -46,13 +50,18 @@
 #define AUTOMATIC 1
 #define INITIALIZATION 2
 #define DEBUG 2
+#define MEASURES 3
 
+//distances in steps
 #define DISTANCE_2to3_COLUMN 1500
 #define DISTANCE_1to2_COLUMN 1300
 #define DISTANCE_0to1_COLUMN 1400
 #define DISTANCE_0to1_ROW 4800
 #define DISTANCE_1to2_ROW 4700
 #define PALLET_VERTICAL_DISTANCE 800
+
+//distance in mm
+#define DISTANCE_TO_WAREHOUSE 1000
 
 #define PRINT_MODALITY 0
 #define PRINT_RESET 1
@@ -64,7 +73,8 @@
 #define PRINT_DEBUG 7
 #define PRINT_BEGIN 8
 #define PRINT_START 9
+#define PRINT_MEASURES 10
 
-#define TIME_ACTUATOR 13000
+#define TIME_ACTUATOR 11000
 
 #endif
