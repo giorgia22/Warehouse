@@ -2,17 +2,14 @@ CON MAGAZZINO VISUALIZZATO:
 da x=9 --> 12 caratteri
 y --> 8 righe (da 0 a 7)
 
-
 SCHERMO VUOTO:
 da x=0 --> 21 caratteri
 y --> 8 righe (da 0 a 7)
 
 
 
-
 INPUT FNECORSA: HIGH > 800
 		LOW  < 50
-
 
 
 TODO LIST:

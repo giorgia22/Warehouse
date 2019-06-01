@@ -8,7 +8,6 @@
 #include "StepperMotor.h"
 #include "Moviment.h"
 #include "Display.h"
-#include "Adafruit_VL53L0X.h"
 
 class Warehouse {
 public:
@@ -21,7 +20,7 @@ public:
     byte request(byte variable);
     void conversionOfMatrix(bool modality, bool oldModality);
     void resetMatrix();
-    void initializeMatrix(bool mod);
+    void initializeMatrix();
     void moveToStart();
     void storePallet(byte actualCell[2], byte destinationCell[2], byte numPallet);
     void getPallet(byte actualCell[2], byte destinationCell[2]);
@@ -36,15 +35,12 @@ private:
     NumberPad numberPad = NumberPad(numberPadPins);
     Display display;
     Moviment moviment;
-    Adafruit_VL53L0X lox = Adafruit_VL53L0X();
     
     int matrix[WAREHOUSE_CELLS_X][WAREHOUSE_CELLS_Y];
     byte firstCellFree[2]={0, 3};
     byte lastCellFull[2]={3, 3};
     byte loadCell[2]={0, 3};
     byte unloadCell[2]={1, 3};
-
-    bool isPalletHere();
 };
 
 #endif

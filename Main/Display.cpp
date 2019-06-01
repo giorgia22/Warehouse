@@ -39,8 +39,6 @@ void Display::print(byte variable){
       GLCD.print("1.automatica");
       GLCD.CursorTo(0, 5);
       GLCD.print("2.posizionamento");
-      GLCD.CursorTo(0, 6);
-      GLCD.print("2.rilevamento misure");
       break;
       
     case PRINT_RESET:
@@ -105,25 +103,6 @@ void Display::print(byte variable){
       GLCD.print("Attendere...");
       break;
 
-    case(PRINT_MEASURES):
-      GLCD.CursorTo(0, 0);
-      GLCD.print("0.CELL UP");
-      GLCD.CursorTo(0, 1);
-      GLCD.print("1.CELL DOWN");
-      GLCD.CursorTo(0, 2);
-      GLCD.print("2.CELL LEFT");
-      GLCD.CursorTo(0, 3);
-      GLCD.print("3.CELL RIGHT");
-      GLCD.CursorTo(0, 4);
-      GLCD.print("4.ACTUATOR FOWARD");
-      GLCD.CursorTo(0, 5);
-      GLCD.print("5.ACTUATOR BACKWARD");
-      GLCD.CursorTo(0, 6);
-      GLCD.print("6.PALLET UP&DOWN");
-      GLCD.CursorTo(4, 7);
-      GLCD.print("<-START MENU'");
-      break;
-    
     case(PRINT_DEBUG):
       GLCD.CursorTo(0, 0);
       GLCD.print("0.UP");

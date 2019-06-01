@@ -8,6 +8,10 @@ void Moviment::begin(){
   motorY.begin();
   pinMode(ACTUATOR_POS_PIN, OUTPUT);
   pinMode(ACTUATOR_NEG_PIN, OUTPUT);
+  pinMode(FC1_PIN, INPUT_PULLUP);
+  pinMode(FC2_PIN, INPUT_PULLUP);
+  pinMode(FC3_PIN, INPUT_PULLUP);
+  pinMode(FC4_PIN, INPUT_PULLUP);
 }
 
 void Moviment::move(byte direction, float degrees){
