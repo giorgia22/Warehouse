@@ -11,6 +11,7 @@ void Warehouse::begin() {
   moviment.actuator(false, true);
   delay(TIME_ACTUATOR);
   moviment.actuator(false, false);
+  lox.begin();
 }
 
 void Warehouse::draw(){
@@ -119,7 +120,7 @@ void Warehouse::resetMatrix(){
    }
 }
 
-void Warehouse::initializeMatrix(){
+void Warehouse::initializeMatrix(bool mod){
   moveToStart();
   moviment.move(UP, 200);
   byte from[2]={0, 3}, to[2];
@@ -140,6 +141,8 @@ void Warehouse::initializeMatrix(){
     
     for(int mov=0; mov<3; mov++){
       moviment.moveBetweenCells(from, to);
+      matrix[to[0]][to[1]] = isPalletHere();
+      
       from[0] = i;
       delay(200);
       if(i%2 == 0){
@@ -154,7 +157,9 @@ void Warehouse::initializeMatrix(){
       }
     }
   }
-  
+  moviment.moveBetweenCells(from, to);
+  matrix[to[0]][to[1]] = isPalletHere();
+  if(mod = AUTOMATIC) conversionOfMatrix(!mod, mod);
   moviment.move(DOWN, 500);
 }
 
@@ -217,13 +222,34 @@ byte Warehouse::getColumn(){
 }
 
 byte Warehouse::startMenu(){
+  moveToStart();
   delay(200);
   byte mod = request(PRINT_MODALITY);
   delay(200);
   byte reset = request(PRINT_RESET);                                         //stampare sul display "scegliere reset: 0.no reset 1.reset(tutto=0) 2.inizz.(spostamento per il magazzino)", aspettare bottone e return
   if(reset == 1) resetMatrix();                                         //portare a 0 tutte le celle di matrix
-  else if(reset == INITIALIZATION) initializeMatrix();  
-  
-
+  else if(reset == INITIALIZATION) initializeMatrix(mod);  
+ 
   return mod;
+}
+
+bool Warehouse::isPalletHere(){
+  VL53L0X_RangingMeasurementData_t measure;
+  lox.rangingTest(&measure, false); 
+      
+  int distance = measure.RangeMilliMeter; 
+      
+  for(int i = 0; i < 10 && distance > DISTANCE_TO_WAREHOUSE; i++){
+    moviment.move(UP, 10);
+    distance = measure.RangeMilliMeter; 
+  }
+  moviment.move(DOWN, 100);
+  for(int i = 0; i < 10 && distance > DISTANCE_TO_WAREHOUSE; i++){
+    moviment.move(DOWN, 10);
+    distance = measure.RangeMilliMeter; 
+  }
+  distance = measure.RangeMilliMeter; 
+      
+  if(distance < DISTANCE_TO_WAREHOUSE) return 1;
+  else return 0;
 }
