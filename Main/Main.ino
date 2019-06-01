@@ -14,7 +14,6 @@ byte num;
 byte actualCell[2]={0, 3}, destinationCell[2];
 
 
-
 struct pallet {
   int row;
   int column;
