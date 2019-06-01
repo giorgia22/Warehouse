@@ -1,10 +1,10 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 #include "Warehouse.h"
-#include "Moviment.h"
+#include "movement.h"
 #include "NumberPad.h"
 
-Moviment moviment;
+movement movement;
 byte numberPadPins[7]={NUMBER_PAD_A_PIN, NUMBER_PAD_B_PIN, NUMBER_PAD_C_PIN, NUMBER_PAD_D_PIN, NUMBER_PAD_E_PIN, NUMBER_PAD_F_PIN, NUMBER_PAD_G_PIN};
 NumberPad numberPad = NumberPad(numberPadPins);
 
@@ -33,22 +33,25 @@ Warehouse warehouse;
 
 void setup() {
   Serial.begin(9600);
-  moviment.begin();
+  movement.begin();
   numberPad.begin();
   warehouse.begin();
-  
+  Serial.println("START");
   warehouse.downloadEEPROM();
   if(EEPROM[9] == 0 || EEPROM[9] == 1)
     oldModality = EEPROM[9];
   else
     oldModality = 0;
-     
+  Serial.println("...");   
   modality = warehouse.startMenu();                                                                            //stampare sul display "scegliere modalità: 0.manuale 1.automatica", aspettare bottone premuto, return modalità
   if(modality != oldModality && (modality == 0 || modality == 1)) warehouse.conversionOfMatrix(modality, oldModality);     //se mod=man e oldMod=auto ->matrix trasformata in 1 e 0, se mod=auto e oldMod=man -> matrix trasformata in da 0 a 9
   delay(200);                                                         //spostare il braccio per tutto il maggazzino e rilevare i pallet
   
+  Serial.println("...");
   warehouse.print(PRINT_START);
   warehouse.moveToStart();
+  
+  Serial.println("...");
 }
 
 void loop() {
@@ -69,7 +72,7 @@ restart:
         modality = warehouse.startMenu();
         goto restart;
       }
-      
+      delay(200);
       if(warehouse.isCellEmpty(destinationCell)){
         warehouse.storePallet(actualCell, destinationCell, 1);
         actualCell[0] = 0;
@@ -85,8 +88,10 @@ restart:
     }
     
     else if(modality == AUTOMATIC){
+      Serial.println("AUTO");
       warehouse.draw();
       num = warehouse.request(PRINT_PALLET);
+      delay(200);
       if(num == MENU){
         actualCell[0] = 0;
         actualCell[1] = 3;
@@ -99,6 +104,16 @@ restart:
         pallets[num-1].column = warehouse.getColumn();
         destinationCell[0] = pallets[num-1].row;
         destinationCell[1] = pallets[num-1].column;
+        Serial.println("MOVE-store");
+        Serial.print("from:  [");
+        Serial.print(actualCell[0]);
+        Serial.print("] [");
+        Serial.print(actualCell[1]);
+        Serial.print("]   to:   [");
+        Serial.print(destinationCell[0]);
+        Serial.print("] [");
+        Serial.print(destinationCell[1]);
+        Serial.println("]");
         warehouse.storePallet(actualCell, destinationCell, num);
         actualCell[0] = 0;
         actualCell[1] = 3;
@@ -107,6 +122,16 @@ restart:
       else{
         destinationCell[0] = pallets[num-1].row;
         destinationCell[1] = pallets[num-1].column;
+        Serial.println("MOVE-get");
+        Serial.print("from:  [");
+        Serial.print(actualCell[0]);
+        Serial.print("] [");
+        Serial.print(actualCell[1]);
+        Serial.print("]   to:   [");
+        Serial.print(destinationCell[0]);
+        Serial.print("] [");
+        Serial.print(destinationCell[1]);
+        Serial.println("]");
         warehouse.getPallet(actualCell, destinationCell);
         pallets[num-1].row = 3;
         pallets[num-1].column = 3;
@@ -120,30 +145,31 @@ restart:
     else if(modality == DEBUG){
       warehouse.print(PRINT_DEBUG);
       byte button = numberPad.readKey();
+      delay(200);
       int dist=300;
       switch (button){
         case(UP):
-          moviment.move(UP, dist);
+          movement.move(UP, dist);
           break;
 
         case(DOWN):
-          moviment.move(DOWN, dist);
+          movement.move(DOWN, dist);
           break;
           
         case(RIGHT):
-          moviment.move(RIGHT, dist);
+          movement.move(RIGHT, dist);
           break;
           
         case(LEFT):
-          moviment.move(LEFT, dist);
+          movement.move(LEFT, dist);
           break;
           
         case(ACTUATOR_FOWARD):
-          moviment.actuator(1, 0);
+          movement.actuator(1, 0);
           break;
           
         case(ACTUATOR_BACKWARD):
-          moviment.actuator(0, 1);
+          movement.actuator(0, 1);
           break;
 
         case(MENU):
@@ -154,7 +180,7 @@ restart:
           goto restart;
           
         default:
-          moviment.actuator(0, 0);
+          movement.actuator(0, 0);
           break;
       }
       delay(100);
@@ -163,7 +189,6 @@ restart:
     else if(modality == MEASURES){
       warehouse.print(PRINT_MEASURES);
       byte button = numberPad.readKey();
-      
       switch (button){
         case(UP):
           if(actualCell[0] != 2) destinationCell[0] = actualCell[0]+1;
@@ -186,21 +211,21 @@ restart:
           break;
           
         case(ACTUATOR_FOWARD):
-          moviment.actuator(1, 0);
+          movement.actuator(1, 0);
           delay(TIME_ACTUATOR);
-          moviment.actuator(0, 0);
+          movement.actuator(0, 0);
           break;
           
         case(ACTUATOR_BACKWARD):
-          moviment.actuator(0, 1);
+          movement.actuator(0, 1);
           delay(TIME_ACTUATOR);
-          moviment.actuator(0, 0);
+          movement.actuator(0, 0);
           break;
           
         case(PALLET_UP_DOWN):
-          moviment.move(UP, PALLET_VERTICAL_DISTANCE);
+          movement.move(UP, PALLET_VERTICAL_DISTANCE);
           delay(1000);
-          moviment.move(DOWN, PALLET_VERTICAL_DISTANCE);
+          movement.move(DOWN, PALLET_VERTICAL_DISTANCE);
           break;
 
         case(MENU):
@@ -211,11 +236,11 @@ restart:
           goto restart;
           
         default:
-          moviment.actuator(0, 0);
+          movement.actuator(0, 0);
           break;
       }
       if(button == UP || button == DOWN || button == LEFT || button == RIGHT){
-        moviment.moveBetweenCells(actualCell, destinationCell);
+        movement.moveBetweenCells(actualCell, destinationCell);
         actualCell[0] = destinationCell[0];
         actualCell[1] = destinationCell[1];
       }

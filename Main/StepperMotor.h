@@ -8,7 +8,7 @@ class StepperMotor {
 public:
     StepperMotor (byte phasesPins[4]);
     void begin ();
-    void move (bool orientation, float degrees);
+    void move (bool orientation, float degrees, byte FC);
 
 private:
     byte phasesPins[4];

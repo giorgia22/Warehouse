@@ -1,13 +1,13 @@
-#ifndef MOVIMENT_H
-#define MOVIMENT_H
+#ifndef movement_H
+#define movement_H
 
 #include <Arduino.h>
 #include "StepperMotor.h"
 #include "definitions.h"
 
-class Moviment{
+class movement{
 public:
-    Moviment ();
+    movement ();
     void begin();
     void pickPallet (bool direction);
     void moveBetweenCells(byte fromCell[2], byte toCell[2]);

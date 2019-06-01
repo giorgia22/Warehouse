@@ -6,7 +6,7 @@
 #include "definitions.h"
 #include "NumberPad.h"
 #include "StepperMotor.h"
-#include "Moviment.h"
+#include "movement.h"
 #include "Display.h"
 #include "Adafruit_VL53L0X.h"
 
@@ -35,11 +35,11 @@ private:
     byte numberPadPins[7]={NUMBER_PAD_A_PIN, NUMBER_PAD_B_PIN, NUMBER_PAD_C_PIN, NUMBER_PAD_D_PIN, NUMBER_PAD_E_PIN, NUMBER_PAD_F_PIN, NUMBER_PAD_G_PIN};
     NumberPad numberPad = NumberPad(numberPadPins);
     Display display;
-    Moviment moviment;
+    movement movement;
     Adafruit_VL53L0X lox = Adafruit_VL53L0X();
     
     int matrix[WAREHOUSE_CELLS_X][WAREHOUSE_CELLS_Y];
-    byte firstCellFree[2]={0, 3};
+    byte firstCellFree[2]={0, 2};
     byte lastCellFull[2]={3, 3};
     byte loadCell[2]={0, 3};
     byte unloadCell[2]={1, 3};

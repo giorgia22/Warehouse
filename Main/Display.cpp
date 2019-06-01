@@ -5,9 +5,11 @@ Display:: Display() {}
 void Display::begin(){
   GLCD.Init();
   GLCD.SelectFont(System5x7);
+  Serial.begin(9600);
 }
 
 void Display::drawWarehouse(int lato, int matrix[3][3]){
+  Serial.println("DRAW");
   GLCD.ClearScreen();
   for(int i = 0; i < 3; i++){
     for(int j = 0; j < 3; j++){
@@ -20,6 +22,12 @@ void Display::drawWarehouse(int lato, int matrix[3][3]){
     for(int x = 1; x < 8; x = x + 3){
       GLCD.CursorTo(x, y);
       GLCD.print(matrix[2-row][2-column]);
+      Serial.print("[ ");
+      Serial.print(2-row);
+      Serial.print("]  [ ");
+      Serial.print(2-column);
+      Serial.print(" ]   ");
+      Serial.println(matrix[2-row][2-column]);
       column++;
     }
   row++;
@@ -40,7 +48,7 @@ void Display::print(byte variable){
       GLCD.CursorTo(0, 5);
       GLCD.print("2.posizionamento");
       GLCD.CursorTo(0, 6);
-      GLCD.print("2.rilevamento misure");
+      GLCD.print("3.rilevamento misure");
       break;
       
     case PRINT_RESET:
@@ -134,10 +142,10 @@ void Display::print(byte variable){
       GLCD.CursorTo(0, 3);
       GLCD.print("3.RIGHT");
       GLCD.CursorTo(0, 4);
-      GLCD.print("5.ACTUATOR FOWARD");
+      GLCD.print("4.ACTUATOR FOWARD");
       GLCD.CursorTo(0, 5);
-      GLCD.print("6.ACTUATOR BACKWARD");
-      GLCD.CursorTo(5, 6);
+      GLCD.print("5.ACTUATOR BACKWARD");
+      GLCD.CursorTo(5, 7);
       GLCD.print("<-START MENU'");
       break;
 

@@ -1,21 +1,40 @@
-#include "Moviment.h"
+#include "movement.h"
 
-Moviment::Moviment(){
+movement::movement(){
 }
 
-void Moviment::begin(){
+void movement::begin(){
   motorX.begin();
   motorY.begin();
   pinMode(ACTUATOR_POS_PIN, OUTPUT);
   pinMode(ACTUATOR_NEG_PIN, OUTPUT);
+  pinMode(FC1_PIN, INPUT_PULLUP);
+  pinMode(FC2_PIN, INPUT_PULLUP);
+  pinMode(FC3_PIN, INPUT_PULLUP);
+  pinMode(FC4_PIN, INPUT_PULLUP);
 }
 
-void Moviment::move(byte direction, float degrees){
-  if(direction == LEFT || direction == RIGHT) motorX.move(direction%2, degrees);
-  else if(direction == UP || direction == DOWN) motorY.move(direction%2, degrees);
+void movement::move(byte direction, float degrees){
+  byte FC;
+  switch(direction){
+    case (UP):
+        FC = FC4_PIN;
+        break;
+    case (DOWN):
+        FC = FC3_PIN;
+        break;
+    case (LEFT):
+        FC = FC1_PIN;
+        break;
+    case (RIGHT):
+        FC = FC2_PIN;
+        break;
+  }
+  if(direction == LEFT || direction == RIGHT) motorX.move(direction%2, degrees, FC);
+  else if(direction == UP || direction == DOWN) motorY.move(direction%2, degrees, FC);
 }
 
-void Moviment::moveBetweenCells(byte fromCell[2], byte toCell[2]){
+void movement::moveBetweenCells(byte fromCell[2], byte toCell[2]){
   byte row = 0;
   byte column = 1;
   if(fromCell[column] < toCell[column])   move(LEFT, distance(false, fromCell[column], toCell[column]));
@@ -24,7 +43,7 @@ void Moviment::moveBetweenCells(byte fromCell[2], byte toCell[2]){
   if(fromCell[row] > toCell[row])         move(DOWN, distance(true, fromCell[row], toCell[row]));
 }
 
-float Moviment::distance(bool direction, byte a, byte b){
+float movement::distance(bool direction, byte a, byte b){
   int distance = 0;
   byte greater = max(a, b);
   byte smaller = min(a, b);
@@ -39,12 +58,12 @@ float Moviment::distance(bool direction, byte a, byte b){
 }
 
 
-void Moviment::actuator(bool pos, bool neg){
+void movement::actuator(bool pos, bool neg){
   digitalWrite(ACTUATOR_POS_PIN, pos);
   digitalWrite(ACTUATOR_NEG_PIN, neg);
 }
 
-void Moviment::pickPallet(bool direction){
+void movement::pickPallet(bool direction){
   actuator(true, false);
   delay(TIME_ACTUATOR);
   actuator(false, false);
@@ -54,7 +73,7 @@ void Moviment::pickPallet(bool direction){
   actuator(false, false);
 }
 
-void Moviment::moveToStart(){
+void movement::moveToStart(){
   while(analogRead(FC3_PIN) > 800) move(DOWN, 16.2);
   while(analogRead(FC1_PIN) > 800) move(LEFT, 16.2);
 }
