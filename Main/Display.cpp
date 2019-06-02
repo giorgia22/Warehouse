@@ -22,11 +22,11 @@ void Display::drawWarehouse(int lato, int matrix[3][3]){
     for(int x = 1; x < 8; x = x + 3){
       GLCD.CursorTo(x, y);
       GLCD.print(matrix[2-row][2-column]);
-      Serial.print("[ ");
+      Serial.print("[");
       Serial.print(2-row);
-      Serial.print("]  [ ");
+      Serial.print("]  [");
       Serial.print(2-column);
-      Serial.print(" ]   ");
+      Serial.print("]   ");
       Serial.println(matrix[2-row][2-column]);
       column++;
     }
@@ -162,6 +162,31 @@ void Display::print(byte variable){
       GLCD.CursorTo(0, 1);
       GLCD.print("iniziale");
       break;
+
+    case(PRINT_OPTIMIZATION):
+      GLCD.CursorTo(9, 0);
+      GLCD.print("Ottimiz=");
+      GLCD.CursorTo(9, 1);
+      GLCD.print("zazione");
+      GLCD.CursorTo(9, 2);
+      GLCD.print("spazio");
+      GLCD.CursorTo(9, 4);
+      GLCD.print("");
+      GLCD.CursorTo(9, 5);
+      GLCD.print("Attendere");
+      GLCD.CursorTo(9, 6);
+      GLCD.print("...");
+      break;
+
+    case(PRINT_SIMULATION):
+      GLCD.CursorTo(0, 0);
+      GLCD.print("Inserire modalita'");
+      GLCD.CursorTo(0, 1);
+      GLCD.print("di simulazione:");
+      GLCD.CursorTo(0, 3);
+      GLCD.print("0.no simulazione");
+      GLCD.CursorTo(0, 4);
+      GLCD.print("1.simulazione");
       
     default:
       break;

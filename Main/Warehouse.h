@@ -10,6 +10,16 @@
 #include "Display.h"
 #include "Adafruit_VL53L0X.h"
 
+
+
+struct menu{
+  byte modality;
+  bool reset;
+  bool initialization;
+  bool simulation;
+};
+
+
 class Warehouse {
 public:
     Warehouse ();
@@ -23,13 +33,16 @@ public:
     void resetMatrix();
     void initializeMatrix(bool mod);
     void moveToStart();
-    void storePallet(byte actualCell[2], byte destinationCell[2], byte numPallet);
-    void getPallet(byte actualCell[2], byte destinationCell[2]);
+    void storePallet(byte actualCell[2], byte destinationCell[2], byte numPallet, bool simulation);
+    void getPallet(byte actualCell[2], byte fromCell[2], byte toCell[2], bool simulation);
     bool isCellEmpty(byte cell[2]);
-    byte getRow();
-    byte getColumn();
+    byte getFirstCellFreeRow();
+    byte getFirstCellFreeColumn();
     void print(byte variable);
-    byte startMenu();
+    struct menu startMenu(bool oldModality);
+    byte getLastCellFullColumn();
+    byte getLastCellFullRow();
+    byte numPalletInCell(byte cell[2]);
 
 private:
     byte numberPadPins[7]={NUMBER_PAD_A_PIN, NUMBER_PAD_B_PIN, NUMBER_PAD_C_PIN, NUMBER_PAD_D_PIN, NUMBER_PAD_E_PIN, NUMBER_PAD_F_PIN, NUMBER_PAD_G_PIN};
@@ -39,12 +52,16 @@ private:
     Adafruit_VL53L0X lox = Adafruit_VL53L0X();
     
     int matrix[WAREHOUSE_CELLS_X][WAREHOUSE_CELLS_Y];
-    byte firstCellFree[2]={0, 2};
-    byte lastCellFull[2]={3, 3};
+    byte firstCellFree[2];
+    byte lastCellFull[2];
     byte loadCell[2]={0, 3};
     byte unloadCell[2]={1, 3};
 
+    struct menu myMenu;
+
     bool isPalletHere();
+    void firstCellFreeCoordinates();
+    void lastCellFullCoordinates();
 };
 
 #endif

@@ -89,6 +89,10 @@ byte Warehouse::request(byte variable){
     case PRINT_RESET:
       limit = 3;
       break;
+
+    case(PRINT_SIMULATION):
+      limit = 2;
+      break;
       
     case PRINT_ROW:
       limit = 3;
@@ -170,33 +174,38 @@ void Warehouse::moveToStart(){
 }
 
 
-void Warehouse::storePallet(byte actualCell[2], byte destinationCell[2], byte numPallet){
-  movement.moveBetweenCells(actualCell, loadCell);
-  delay(500);
-  movement.pickPallet(UP);
-  delay(500);
-  print(PRINT_DEPOSITO);
-  movement.moveBetweenCells(loadCell, destinationCell);
-  delay(500);
-  movement.pickPallet(DOWN);
-  delay(500);
-  movement.moveBetweenCells(destinationCell, loadCell);     //sostituire con moveToStart quando ci saranno i finecorsa
+void Warehouse::storePallet(byte actualCell[2], byte destinationCell[2], byte numPallet, bool simulation){
+  if(!simulation){
+    movement.moveBetweenCells(actualCell, loadCell);
+    delay(500);
+    movement.pickPallet(UP);
+    delay(500);
+    print(PRINT_DEPOSITO);
+    movement.moveBetweenCells(loadCell, destinationCell);
+    delay(500);
+    movement.pickPallet(DOWN);
+    delay(500);
+    movement.moveBetweenCells(destinationCell, loadCell);     //sostituire con moveToStart quando ci saranno i finecorsa
+  }
   matrix[destinationCell[0]][destinationCell[1]] = numPallet;
   draw();
   uploadEEPROM();
 }
 
-void Warehouse::getPallet(byte actualCell[2], byte destinationCell[2]){
-  movement.moveBetweenCells(actualCell, destinationCell);
-  delay(200);
-  movement.pickPallet(UP);
-  delay(200);
-  print(PRINT_PRELIEVO);
-  movement.moveBetweenCells(destinationCell, unloadCell);
-  delay(200);
-  movement.pickPallet(DOWN);
-  delay(200);
-  matrix[destinationCell[0]][destinationCell[1]]=0;
+void Warehouse::getPallet(byte actualCell[2], byte fromCell[2], byte toCell[2], bool simulation){
+  if(!simulation){
+    movement.moveBetweenCells(actualCell, fromCell);
+    delay(200);
+    movement.pickPallet(UP);
+    delay(200);
+    print(PRINT_PRELIEVO);
+    movement.moveBetweenCells(fromCell, toCell);
+    delay(200);
+    movement.pickPallet(DOWN);
+    delay(200);
+  }
+  if(toCell[1] != 3)  matrix[toCell[0]][toCell[1]] = matrix[fromCell[0]][fromCell[1]];
+  matrix[fromCell[0]][fromCell[1]] = 0;
   draw();
   uploadEEPROM();
 }
@@ -205,38 +214,61 @@ bool Warehouse::isCellEmpty(byte cell[2]){
   return (matrix[cell[0]][cell[1]] == 0);
 }
 
-byte Warehouse::getRow(){
-  byte row = firstCellFree[0];
-  if(firstCellFree[1] == 0)
-    firstCellFree[0]++;
-  return row;
+void Warehouse::firstCellFreeCoordinates(){
+  for(int i = 0; i < 3; i++){
+    for(int j = 2; j >= 0; j--){
+      if(matrix[i][j] == 0){
+        firstCellFree[0] = i;
+        firstCellFree[1] = j;
+        return;
+      }
+    }
+  }
 }
 
-byte Warehouse::getColumn(){
-  byte column = firstCellFree[1];
-  if (column == 0)
-    firstCellFree[1] = 2;
-  else
-    firstCellFree[1]--;
-  return column;
+byte Warehouse::getFirstCellFreeRow(){
+  firstCellFreeCoordinates();
+  return firstCellFree[0];
 }
 
-byte Warehouse::startMenu(){
-  Serial.println("...");
+byte Warehouse::getFirstCellFreeColumn(){
+  return firstCellFree[1];
+}
+
+struct menu Warehouse::startMenu(bool oldModality){
   moveToStart();
-  Serial.println("...");
   delay(200);
   Serial.println("mod");
-  byte mod = request(PRINT_MODALITY);
+  myMenu.modality = request(PRINT_MODALITY);
+  if(myMenu.modality != oldModality && (myMenu.modality == 0 || myMenu.modality == 1))
+    conversionOfMatrix(myMenu.modality, oldModality);
   delay(200);
   Serial.println("reset");
-  byte reset = request(PRINT_RESET);                                         //stampare sul display "scegliere reset: 0.no reset 1.reset(tutto=0) 2.inizz.(spostamento per il magazzino)", aspettare bottone e return
+  byte reset = request(PRINT_RESET);
   delay(200);
-  if(reset == 1) resetMatrix();                                         //portare a 0 tutte le celle di matrix
-  else if(reset == INITIALIZATION) initializeMatrix(mod);  
- 
-  Serial.println("...");
-  return mod;
+  myMenu.initialization = 0;
+  switch(reset){
+    case(!RESET):
+      myMenu.reset = 0;
+      break;
+      
+    case(RESET):
+      myMenu.reset = 1;
+      resetMatrix();
+      break;
+
+    case(INITIALIZATION):
+      myMenu.initialization = 1;
+      initializeMatrix(myMenu.modality);
+      break;
+
+    default:
+      break;
+  }
+  Serial.println("sim");
+  myMenu.simulation = request(PRINT_SIMULATION);
+
+  return myMenu;
 }
 
 bool Warehouse::isPalletHere(){
@@ -244,10 +276,11 @@ bool Warehouse::isPalletHere(){
   lox.rangingTest(&measure, false); 
       
   int distance = measure.RangeMilliMeter; 
-      
+      Serial.println(distance);
   for(int i = 0; i < 10 && distance > DISTANCE_TO_WAREHOUSE; i++){
     movement.move(UP, 10);
     distance = measure.RangeMilliMeter; 
+      Serial.println(distance);
   }
   movement.move(DOWN, 100);
   for(int i = 0; i < 10 && distance > DISTANCE_TO_WAREHOUSE; i++){
@@ -258,4 +291,29 @@ bool Warehouse::isPalletHere(){
       
   if(distance < DISTANCE_TO_WAREHOUSE) return 1;
   else return 0;
+}
+
+void Warehouse::lastCellFullCoordinates(){
+  for(int i = 2; i >= 0; i--){
+    for(int j = 0; j < 3; j++){
+      if(matrix[i][j] != 0) {
+        lastCellFull[0] = i;
+        lastCellFull[1] = j;
+        return;
+      }
+    }
+  }
+}
+
+byte Warehouse::getLastCellFullColumn(){
+  return lastCellFull[1];
+}
+
+byte Warehouse::getLastCellFullRow(){
+  lastCellFullCoordinates();
+  return lastCellFull[0];
+}
+
+byte Warehouse::numPalletInCell(byte cell[2]){
+  return matrix[cell[0]][cell[1]];
 }

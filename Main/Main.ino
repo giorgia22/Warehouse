@@ -8,11 +8,10 @@ movement movement;
 byte numberPadPins[7]={NUMBER_PAD_A_PIN, NUMBER_PAD_B_PIN, NUMBER_PAD_C_PIN, NUMBER_PAD_D_PIN, NUMBER_PAD_E_PIN, NUMBER_PAD_F_PIN, NUMBER_PAD_G_PIN};
 NumberPad numberPad = NumberPad(numberPadPins);
 
-byte oldModality, modality;
-byte reset;
+byte oldModality;
 byte num;
 byte actualCell[2]={0, 3}, destinationCell[2];
-
+byte unloadCell[2]={1, 3};
 
 struct pallet {
   int row;
@@ -30,6 +29,7 @@ struct pallet {
 };
 
 Warehouse warehouse;
+struct menu menuMain;
 
 void setup() {
   Serial.begin(9600);
@@ -42,26 +42,34 @@ void setup() {
     oldModality = EEPROM[9];
   else
     oldModality = 0;
-  Serial.println("...");   
-  modality = warehouse.startMenu();                                                                            //stampare sul display "scegliere modalità: 0.manuale 1.automatica", aspettare bottone premuto, return modalità
-  if(modality != oldModality && (modality == 0 || modality == 1)) warehouse.conversionOfMatrix(modality, oldModality);     //se mod=man e oldMod=auto ->matrix trasformata in 1 e 0, se mod=auto e oldMod=man -> matrix trasformata in da 0 a 9
-  delay(200);                                                         //spostare il braccio per tutto il maggazzino e rilevare i pallet
-  
-  Serial.println("...");
+    
+  menuMain = warehouse.startMenu(oldModality);
+  if(menuMain.reset){
+    for(int i = 0; i < 9; i++){
+      pallets[i].column = 3;
+      pallets[i].row = 3;
+    }
+  }
+  delay(200);
+
   warehouse.print(PRINT_START);
   warehouse.moveToStart();
-  
-  Serial.println("...");
 }
 
 void loop() {
 restart:
-    if(modality == MANUAL){
+    if(menuMain.modality == MANUAL){
       destinationCell[0] = warehouse.request(PRINT_ROW);
       if(destinationCell[0] == MENU){
         actualCell[0] = 0;
         actualCell[1] = 3;
-        modality = warehouse.startMenu();
+        menuMain = warehouse.startMenu(menuMain.modality);
+        if(menuMain.reset){
+          for(int i = 0; i < 9; i++){
+            pallets[i].column = 3;
+            pallets[i].row = 3;
+           }
+        }
         goto restart;
       }
       delay(200);
@@ -69,84 +77,82 @@ restart:
       if(destinationCell[1] == MENU){
         actualCell[0] = 0;
         actualCell[1] = 3;
-        modality = warehouse.startMenu();
+        menuMain = warehouse.startMenu(menuMain.modality);
+        if(menuMain.reset){
+          for(int i = 0; i < 9; i++){
+            pallets[i].column = 3;
+            pallets[i].row = 3;
+           }
+        }
         goto restart;
       }
       delay(200);
       if(warehouse.isCellEmpty(destinationCell)){
-        warehouse.storePallet(actualCell, destinationCell, 1);
+        warehouse.storePallet(actualCell, destinationCell, 1, menuMain.simulation);
         actualCell[0] = 0;
         actualCell[1] = 3;
         warehouse.moveToStart();
       }
       
       else{
-        warehouse.getPallet(actualCell, destinationCell);
+        warehouse.getPallet(actualCell, destinationCell, unloadCell, menuMain.simulation);
         actualCell[0] = 1;
         actualCell[1] = 3;
       }
     }
     
-    else if(modality == AUTOMATIC){
-      Serial.println("AUTO");
+    else if(menuMain.modality == AUTOMATIC){
       warehouse.draw();
       num = warehouse.request(PRINT_PALLET);
       delay(200);
       if(num == MENU){
         actualCell[0] = 0;
         actualCell[1] = 3;
-        modality = warehouse.startMenu();
+        menuMain = warehouse.startMenu(menuMain.modality);
+        if(menuMain.reset){
+          for(int i = 0; i < 9; i++){
+            pallets[i].column = 3;
+            pallets[i].row = 3;
+           }
+        }
         goto restart;
       }
       
       if(pallets[num-1].row == 3 || pallets[num-1].column == 3){
-        pallets[num-1].row = warehouse.getRow();
-        pallets[num-1].column = warehouse.getColumn();
+        pallets[num-1].row = warehouse.getFirstCellFreeRow();
+        pallets[num-1].column = warehouse.getFirstCellFreeColumn();
         destinationCell[0] = pallets[num-1].row;
         destinationCell[1] = pallets[num-1].column;
-        Serial.println("MOVE-store");
-        Serial.print("from:  [");
-        Serial.print(actualCell[0]);
-        Serial.print("] [");
-        Serial.print(actualCell[1]);
-        Serial.print("]   to:   [");
-        Serial.print(destinationCell[0]);
-        Serial.print("] [");
-        Serial.print(destinationCell[1]);
-        Serial.println("]");
-        warehouse.storePallet(actualCell, destinationCell, num);
+        warehouse.storePallet(actualCell, destinationCell, num, menuMain.simulation);
         actualCell[0] = 0;
         actualCell[1] = 3;
+        if(!menuMain.simulation) warehouse.moveToStart();
         warehouse.draw();
       }
       else{
         destinationCell[0] = pallets[num-1].row;
         destinationCell[1] = pallets[num-1].column;
-        Serial.println("MOVE-get");
-        Serial.print("from:  [");
-        Serial.print(actualCell[0]);
-        Serial.print("] [");
-        Serial.print(actualCell[1]);
-        Serial.print("]   to:   [");
-        Serial.print(destinationCell[0]);
-        Serial.print("] [");
-        Serial.print(destinationCell[1]);
-        Serial.println("]");
-        warehouse.getPallet(actualCell, destinationCell);
+        warehouse.getPallet(actualCell, destinationCell, unloadCell, menuMain.simulation);
         pallets[num-1].row = 3;
         pallets[num-1].column = 3;
         actualCell[0] = 1;
         actualCell[1] = 3;
+        warehouse.print(PRINT_OPTIMIZATION);
+        byte fromCell[2] = {warehouse.getLastCellFullRow(), warehouse.getLastCellFullColumn()};
+        warehouse.getPallet(actualCell, fromCell, destinationCell, menuMain.simulation);
+        byte num = warehouse.numPalletInCell(destinationCell);
+        pallets[num-1].row = destinationCell[0];
+        pallets[num-1].column = destinationCell[1];
         warehouse.draw();
       }
       
     }
     
-    else if(modality == DEBUG){
+    else if(menuMain.modality == DEBUG){
       warehouse.print(PRINT_DEBUG);
       byte button = numberPad.readKey();
       delay(200);
-      int dist=300;
+      int dist = 300;
       switch (button){
         case(UP):
           movement.move(UP, dist);
@@ -176,7 +182,13 @@ restart:
           delay(200);
           actualCell[0] = 0;
           actualCell[1] = 3;
-          modality = warehouse.startMenu();
+          menuMain = warehouse.startMenu(menuMain.modality);
+          if(menuMain.reset){
+            for(int i = 0; i < 9; i++){
+              pallets[i].column = 3;
+              pallets[i].row = 3;
+            }
+          }
           goto restart;
           
         default:
@@ -186,7 +198,7 @@ restart:
       delay(100);
     }
     
-    else if(modality == MEASURES){
+    else if(menuMain.modality == MEASURES){
       warehouse.print(PRINT_MEASURES);
       byte button = numberPad.readKey();
       switch (button){
@@ -232,7 +244,13 @@ restart:
           delay(200);
           actualCell[0] = 0;
           actualCell[1] = 3;
-          modality = warehouse.startMenu();
+          menuMain = warehouse.startMenu(menuMain.modality);
+          if(menuMain.reset){
+            for(int i = 0; i < 9; i++){
+              pallets[i].column = 3;
+              pallets[i].row = 3;
+            }
+          }
           goto restart;
           
         default:

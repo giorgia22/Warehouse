@@ -49,8 +49,10 @@
 #define MANUAL 0
 #define AUTOMATIC 1
 #define INITIALIZATION 2
+#define RESET 1
 #define DEBUG 2
 #define MEASURES 3
+#define SIMULATION 1
 
 //distances in steps
 #define DISTANCE_2to3_COLUMN 1350
@@ -61,7 +63,7 @@
 #define PALLET_VERTICAL_DISTANCE 600
 
 //distance in mm
-#define DISTANCE_TO_WAREHOUSE 1000
+#define DISTANCE_TO_WAREHOUSE 200
 
 #define PRINT_MODALITY 0
 #define PRINT_RESET 1
@@ -74,6 +76,8 @@
 #define PRINT_BEGIN 8
 #define PRINT_START 9
 #define PRINT_MEASURES 10
+#define PRINT_OPTIMIZATION 11
+#define PRINT_SIMULATION 12
 
 #define TIME_ACTUATOR 12000
 
