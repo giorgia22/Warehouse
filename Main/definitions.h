@@ -65,7 +65,7 @@
 //distance in mm
 #define DISTANCE_TO_WAREHOUSE 200
 
-#define PRINT_MODALITY 0
+#define PRINT_mode 0
 #define PRINT_RESET 1
 #define PRINT_ROW 2
 #define PRINT_COLUMN 3

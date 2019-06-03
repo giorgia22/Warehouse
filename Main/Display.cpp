@@ -5,11 +5,9 @@ Display:: Display() {}
 void Display::begin(){
   GLCD.Init();
   GLCD.SelectFont(System5x7);
-  Serial.begin(9600);
 }
 
 void Display::drawWarehouse(int lato, int matrix[3][3]){
-  Serial.println("DRAW");
   GLCD.ClearScreen();
   for(int i = 0; i < 3; i++){
     for(int j = 0; j < 3; j++){
@@ -22,12 +20,6 @@ void Display::drawWarehouse(int lato, int matrix[3][3]){
     for(int x = 1; x < 8; x = x + 3){
       GLCD.CursorTo(x, y);
       GLCD.print(matrix[2-row][2-column]);
-      Serial.print("[");
-      Serial.print(2-row);
-      Serial.print("]  [");
-      Serial.print(2-column);
-      Serial.print("]   ");
-      Serial.println(matrix[2-row][2-column]);
       column++;
     }
   row++;
@@ -36,7 +28,7 @@ void Display::drawWarehouse(int lato, int matrix[3][3]){
 
 void Display::print(byte variable){
   switch (variable){
-    case PRINT_MODALITY:
+    case PRINT_mode:
       GLCD.CursorTo(0, 0);
       GLCD.print("Inserire modalita'");
       GLCD.CursorTo(0, 1);

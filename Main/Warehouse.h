@@ -12,8 +12,8 @@
 
 
 
-struct menu{
-  byte modality;
+struct Menu{
+  byte mode;
   bool reset;
   bool initialization;
   bool simulation;
@@ -29,7 +29,7 @@ public:
     void uploadEEPROM();
     void move (byte direction, float degrees);
     byte request(byte variable);
-    void conversionOfMatrix(bool modality, bool oldModality);
+    void conversionOfMatrix(bool mode, bool oldmode);
     void resetMatrix();
     void initializeMatrix(bool mod);
     void moveToStart();
@@ -39,7 +39,7 @@ public:
     byte getFirstCellFreeRow();
     byte getFirstCellFreeColumn();
     void print(byte variable);
-    struct menu startMenu(bool oldModality);
+    Menu startMenu(bool oldmode);
     byte getLastCellFullColumn();
     byte getLastCellFullRow();
     byte numPalletInCell(byte cell[2]);
@@ -48,7 +48,7 @@ private:
     byte numberPadPins[7]={NUMBER_PAD_A_PIN, NUMBER_PAD_B_PIN, NUMBER_PAD_C_PIN, NUMBER_PAD_D_PIN, NUMBER_PAD_E_PIN, NUMBER_PAD_F_PIN, NUMBER_PAD_G_PIN};
     NumberPad numberPad = NumberPad(numberPadPins);
     Display display;
-    movement movement;
+    Movement movement;
     Adafruit_VL53L0X lox = Adafruit_VL53L0X();
     
     int matrix[WAREHOUSE_CELLS_X][WAREHOUSE_CELLS_Y];
@@ -57,7 +57,7 @@ private:
     byte loadCell[2]={0, 3};
     byte unloadCell[2]={1, 3};
 
-    struct menu myMenu;
+    Menu myMenu;
 
     bool isPalletHere();
     void firstCellFreeCoordinates();

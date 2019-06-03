@@ -12,7 +12,6 @@ void Warehouse::begin() {
   delay(TIME_ACTUATOR);
   movement.actuator(false, false);
   lox.begin();
-  Serial.begin(9600);
 }
 
 void Warehouse::draw(){
@@ -47,8 +46,8 @@ void Warehouse::move(byte direction, float degrees){
 }
 
 
-void Warehouse::conversionOfMatrix(bool modality, bool oldModality){
-  if(modality == MANUAL && oldModality == AUTOMATIC){
+void Warehouse::conversionOfMatrix(bool mode, bool oldmode){
+  if(mode == MANUAL && oldmode == AUTOMATIC){
     for(int i = 0; i < WAREHOUSE_CELLS_X; i++){
       for(int j = 0; j < WAREHOUSE_CELLS_Y; j++){
         if(matrix[i][j] != 0)
@@ -82,7 +81,7 @@ byte Warehouse::request(byte variable){
   
   int limit;
   switch (variable){
-    case PRINT_MODALITY:
+    case PRINT_mode:
       limit = 4;
       break;
       
@@ -128,44 +127,19 @@ void Warehouse::resetMatrix(){
 void Warehouse::initializeMatrix(bool mod){
   moveToStart();
   movement.move(UP, 200);
-  byte from[2]={0, 3}, to[2];
-  
-  for(int i=0; i<3; i++){
-    int j = 3;
-    if (i == 2) j = 2;
-    else if (i == 1) j = 0;
-   
-    to[0] = i;
-    from[1] = j;
-    to[1] = j-1;
-    
-    if(i != 0){
-      from[0] = i-1;
-      to[1] = j;
-    }
-    
-    for(int mov=0; mov<3; mov++){
+  byte from[2], to[2]={0, 3};
+  for(int i=0; i<9; i++) {
+      from[0] = to[0];
+      from[1] = to[1];
+
+      to[0] = i/3;
+      if (to[0]%2==1) to[1] = i%3;
+      else to[1] = 2 - i%3;
+      
       movement.moveBetweenCells(from, to);
       matrix[to[0]][to[1]] = isPalletHere();
-      
-      from[0] = i;
-      delay(200);
-      if(i%2 == 0){
-        j--;
-        from[1] = j;
-        to[1] = j-1;
-      }
-      else{
-        j++;
-        from[1] = j;
-        to[1] = j+1;
-      }
-    }
   }
-  movement.moveBetweenCells(from, to);
-  matrix[to[0]][to[1]] = isPalletHere();
-  if(mod = AUTOMATIC) conversionOfMatrix(!mod, mod);
-  movement.move(DOWN, 500);
+  if(mod == AUTOMATIC) conversionOfMatrix(!mod, mod);
 }
 
 void Warehouse::moveToStart(){
@@ -235,15 +209,13 @@ byte Warehouse::getFirstCellFreeColumn(){
   return firstCellFree[1];
 }
 
-struct menu Warehouse::startMenu(bool oldModality){
+Menu Warehouse::startMenu(bool oldmode){
   moveToStart();
   delay(200);
-  Serial.println("mod");
-  myMenu.modality = request(PRINT_MODALITY);
-  if(myMenu.modality != oldModality && (myMenu.modality == 0 || myMenu.modality == 1))
-    conversionOfMatrix(myMenu.modality, oldModality);
+  myMenu.mode = request(PRINT_mode);
+  if(myMenu.mode != oldmode && (myMenu.mode == 0 || myMenu.mode == 1))
+    conversionOfMatrix(myMenu.mode, oldmode);
   delay(200);
-  Serial.println("reset");
   byte reset = request(PRINT_RESET);
   delay(200);
   myMenu.initialization = 0;
@@ -259,38 +231,35 @@ struct menu Warehouse::startMenu(bool oldModality){
 
     case(INITIALIZATION):
       myMenu.initialization = 1;
-      initializeMatrix(myMenu.modality);
+      initializeMatrix(myMenu.mode);
       break;
 
     default:
       break;
   }
-  Serial.println("sim");
   myMenu.simulation = request(PRINT_SIMULATION);
 
   return myMenu;
 }
 
 bool Warehouse::isPalletHere(){
+  int i;
   VL53L0X_RangingMeasurementData_t measure;
-  lox.rangingTest(&measure, false); 
-      
+  lox.rangingTest(&measure, false);
   int distance = measure.RangeMilliMeter; 
-      Serial.println(distance);
-  for(int i = 0; i < 10 && distance > DISTANCE_TO_WAREHOUSE; i++){
+  for(i = 0; i < 10 && distance > DISTANCE_TO_WAREHOUSE; i++){
     movement.move(UP, 10);
+    lox.rangingTest(&measure, false);
     distance = measure.RangeMilliMeter; 
-      Serial.println(distance);
   }
-  movement.move(DOWN, 100);
-  for(int i = 0; i < 10 && distance > DISTANCE_TO_WAREHOUSE; i++){
+  movement.move(DOWN, i*10);
+  for(i = 0; i < 10 && distance > DISTANCE_TO_WAREHOUSE; i++){
     movement.move(DOWN, 10);
+    lox.rangingTest(&measure, false);
     distance = measure.RangeMilliMeter; 
   }
-  distance = measure.RangeMilliMeter; 
-      
-  if(distance < DISTANCE_TO_WAREHOUSE) return 1;
-  else return 0;
+  movement.move(UP, i*10);
+  return distance < DISTANCE_TO_WAREHOUSE;
 }
 
 void Warehouse::lastCellFullCoordinates(){
