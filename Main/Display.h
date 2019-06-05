@@ -14,7 +14,6 @@ public:
     void clear();
 
 private:
-
 };
 
 #endif

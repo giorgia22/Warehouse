@@ -15,9 +15,9 @@ void Display::drawWarehouse(int lato, int matrix[3][3]){
     }
   }
   int row = 0;
-  for(int y = 1; y < 6; y = y + 2){
+  for(int y = 1; y < 6; y = y+2){
     int column = 0;
-    for(int x = 1; x < 8; x = x + 3){
+    for(int x = 1; x < 8; x = x+3){
       GLCD.CursorTo(x, y);
       GLCD.print(matrix[2-row][2-column]);
       column++;
@@ -28,15 +28,15 @@ void Display::drawWarehouse(int lato, int matrix[3][3]){
 
 void Display::print(byte variable){
   switch (variable){
-    case PRINT_mode:
+    case PRINT_MODE:
       GLCD.CursorTo(0, 0);
       GLCD.print("Inserire modalita'");
       GLCD.CursorTo(0, 1);
       GLCD.print("di funzionamento:");
       GLCD.CursorTo(0, 3);
-      GLCD.print("0.manuale");
+      GLCD.print("0.automatica");
       GLCD.CursorTo(0, 4);
-      GLCD.print("1.automatica");
+      GLCD.print("1.manuale");
       GLCD.CursorTo(0, 5);
       GLCD.print("2.posizionamento");
       GLCD.CursorTo(0, 6);

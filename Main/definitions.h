@@ -16,13 +16,13 @@
 #define H_BRIDGE2_PH4_PIN 9
 
 #define NUMBER_PAD_A_PIN 2
+
 #define NUMBER_PAD_B_PIN 3
 #define NUMBER_PAD_C_PIN 4
 #define NUMBER_PAD_D_PIN 5
 #define NUMBER_PAD_E_PIN 6
 #define NUMBER_PAD_F_PIN 7
 #define NUMBER_PAD_G_PIN 8
-
 #define AVANT 11
 #define ARROW 10
 
@@ -46,8 +46,8 @@
 #define LOAD 0
 #define UNLOAD 1
 
-#define MANUAL 0
-#define AUTOMATIC 1
+#define MANUAL 1
+#define AUTOMATIC 0
 #define INITIALIZATION 2
 #define RESET 1
 #define DEBUG 2
@@ -61,11 +61,12 @@
 #define DISTANCE_0to1_ROW 4700
 #define DISTANCE_1to2_ROW 4700
 #define PALLET_VERTICAL_DISTANCE 600
+#define DIST_DEBUG 300
 
 //distance in mm
 #define DISTANCE_TO_WAREHOUSE 200
 
-#define PRINT_mode 0
+#define PRINT_MODE 0
 #define PRINT_RESET 1
 #define PRINT_ROW 2
 #define PRINT_COLUMN 3
@@ -79,6 +80,6 @@
 #define PRINT_OPTIMIZATION 11
 #define PRINT_SIMULATION 12
 
-#define TIME_ACTUATOR 12000
+#define TIME_ACTUATOR 12500
 
 #endif

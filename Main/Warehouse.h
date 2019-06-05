@@ -25,13 +25,11 @@ public:
     Warehouse ();
     void begin ();
     void draw();
-    void downloadEEPROM();
-    void uploadEEPROM();
     void move (byte direction, float degrees);
     byte request(byte variable);
-    void conversionOfMatrix(bool mode, bool oldmode);
+    void conversionOfMatrix(bool mode);
     void resetMatrix();
-    void initializeMatrix(bool mod);
+    void initializeMatrix(byte mod);
     void moveToStart();
     void storePallet(byte actualCell[2], byte destinationCell[2], byte numPallet, bool simulation);
     void getPallet(byte actualCell[2], byte fromCell[2], byte toCell[2], bool simulation);
@@ -39,10 +37,14 @@ public:
     byte getFirstCellFreeRow();
     byte getFirstCellFreeColumn();
     void print(byte variable);
-    Menu startMenu(bool oldmode);
+    Menu startMenu(bool oldMode);
     byte getLastCellFullColumn();
     byte getLastCellFullRow();
     byte numPalletInCell(byte cell[2]);
+    void optimize();
+    bool getOldMode();
+    byte getRowPallet(byte numPallet);
+    byte getColumnPallet(byte numPallet);
 
 private:
     byte numberPadPins[7]={NUMBER_PAD_A_PIN, NUMBER_PAD_B_PIN, NUMBER_PAD_C_PIN, NUMBER_PAD_D_PIN, NUMBER_PAD_E_PIN, NUMBER_PAD_F_PIN, NUMBER_PAD_G_PIN};
@@ -62,6 +64,8 @@ private:
     bool isPalletHere();
     void firstCellFreeCoordinates();
     void lastCellFullCoordinates();
+    void downloadEEPROM();
+    void uploadEEPROM();
 };
 
 #endif

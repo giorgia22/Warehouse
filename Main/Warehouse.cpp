@@ -12,6 +12,7 @@ void Warehouse::begin() {
   delay(TIME_ACTUATOR);
   movement.actuator(false, false);
   lox.begin();
+  downloadEEPROM();
 }
 
 void Warehouse::draw(){
@@ -46,8 +47,8 @@ void Warehouse::move(byte direction, float degrees){
 }
 
 
-void Warehouse::conversionOfMatrix(bool mode, bool oldmode){
-  if(mode == MANUAL && oldmode == AUTOMATIC){
+void Warehouse::conversionOfMatrix(bool mode){
+  if(mode == MANUAL){
     for(int i = 0; i < WAREHOUSE_CELLS_X; i++){
       for(int j = 0; j < WAREHOUSE_CELLS_Y; j++){
         if(matrix[i][j] != 0)
@@ -55,7 +56,7 @@ void Warehouse::conversionOfMatrix(bool mode, bool oldmode){
       }
     }
   }
-  else{
+  else if(mode== AUTOMATIC){
     int ultimoPallet = 1;
     for(int i = 0; i < WAREHOUSE_CELLS_X; i++){
       for(int j = 0; j < WAREHOUSE_CELLS_Y; j++){
@@ -81,7 +82,7 @@ byte Warehouse::request(byte variable){
   
   int limit;
   switch (variable){
-    case PRINT_mode:
+    case PRINT_MODE:
       limit = 4;
       break;
       
@@ -124,7 +125,7 @@ void Warehouse::resetMatrix(){
    }
 }
 
-void Warehouse::initializeMatrix(bool mod){
+void Warehouse::initializeMatrix(byte mod){
   moveToStart();
   movement.move(UP, 200);
   byte from[2], to[2]={0, 3};
@@ -138,8 +139,11 @@ void Warehouse::initializeMatrix(bool mod){
       
       movement.moveBetweenCells(from, to);
       matrix[to[0]][to[1]] = isPalletHere();
+      draw();
   }
-  if(mod == AUTOMATIC) conversionOfMatrix(!mod, mod);
+  conversionOfMatrix(mod);
+  movement.move(DOWN, 200);
+  optimize();
 }
 
 void Warehouse::moveToStart(){
@@ -159,7 +163,7 @@ void Warehouse::storePallet(byte actualCell[2], byte destinationCell[2], byte nu
     delay(500);
     movement.pickPallet(DOWN);
     delay(500);
-    movement.moveBetweenCells(destinationCell, loadCell);     //sostituire con moveToStart quando ci saranno i finecorsa
+    movement.moveBetweenCells(destinationCell, loadCell);
   }
   matrix[destinationCell[0]][destinationCell[1]] = numPallet;
   draw();
@@ -209,13 +213,13 @@ byte Warehouse::getFirstCellFreeColumn(){
   return firstCellFree[1];
 }
 
-Menu Warehouse::startMenu(bool oldmode){
+Menu Warehouse::startMenu(bool oldMode){
   moveToStart();
+  myMenu.mode = request(PRINT_MODE);
   delay(200);
-  myMenu.mode = request(PRINT_mode);
-  if(myMenu.mode != oldmode && (myMenu.mode == 0 || myMenu.mode == 1))
-    conversionOfMatrix(myMenu.mode, oldmode);
-  delay(200);
+  if(myMenu.mode != oldMode)
+    conversionOfMatrix(myMenu.mode);
+  EEPROM[9] = myMenu.mode;
   byte reset = request(PRINT_RESET);
   delay(200);
   myMenu.initialization = 0;
@@ -238,7 +242,7 @@ Menu Warehouse::startMenu(bool oldmode){
       break;
   }
   myMenu.simulation = request(PRINT_SIMULATION);
-
+  delay(200);
   return myMenu;
 }
 
@@ -246,11 +250,11 @@ bool Warehouse::isPalletHere(){
   int i;
   VL53L0X_RangingMeasurementData_t measure;
   lox.rangingTest(&measure, false);
-  int distance = measure.RangeMilliMeter; 
+  int distance = measure.RangeMilliMeter;  
   for(i = 0; i < 10 && distance > DISTANCE_TO_WAREHOUSE; i++){
     movement.move(UP, 10);
     lox.rangingTest(&measure, false);
-    distance = measure.RangeMilliMeter; 
+    distance = measure.RangeMilliMeter;
   }
   movement.move(DOWN, i*10);
   for(i = 0; i < 10 && distance > DISTANCE_TO_WAREHOUSE; i++){
@@ -285,4 +289,46 @@ byte Warehouse::getLastCellFullRow(){
 
 byte Warehouse::numPalletInCell(byte cell[2]){
   return matrix[cell[0]][cell[1]];
+}
+
+void Warehouse::optimize(){
+  firstCellFree[0]=getFirstCellFreeRow();
+  firstCellFree[1]=getFirstCellFreeColumn();
+  lastCellFull[0]=getLastCellFullRow();
+  lastCellFull[1]=getLastCellFullColumn();
+  byte actCell[2]={2, 0};
+  while(lastCellFull[0] > firstCellFree[0] || lastCellFull[1] < firstCellFree[1]){
+    getPallet(actCell, lastCellFull, firstCellFree,0);
+    actCell[0] = firstCellFree[0];
+    actCell[1] = firstCellFree[1];
+    firstCellFree[0]=getFirstCellFreeRow();
+    firstCellFree[1]=getFirstCellFreeColumn();
+    lastCellFull[0]=getLastCellFullRow();
+    lastCellFull[1]=getLastCellFullColumn();
+  }
+}
+
+bool Warehouse::getOldMode(){
+  return EEPROM[9];
+}
+
+byte Warehouse::getRowPallet(byte numPallet){
+  for(int i=0; i<3; i++){
+    for(int j=0; j<3; j++){
+      if(matrix[i][j]==numPallet)
+        return i;
+    }
+  }
+  return 3;
+}
+
+
+byte Warehouse::getColumnPallet(byte numPallet){
+  for(int i=0; i<3; i++){
+    for(int j=0; j<3; j++){
+      if(matrix[i][j]==numPallet)
+        return j;
+    }
+  }
+  return 3;
 }
